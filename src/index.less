@@ -1,0 +1,37 @@
+@import '../node_modules/rsuite/styles/index.less';
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;600;700;800;900&display=swap');
+
+body {
+  font-family: 'Poppins', Arial, Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', STXihei, sans-serif;
+}
+
+.error-page {
+  display: flex;
+  height: 100vh;
+  margin-top: -40px;
+  justify-content: center;
+  align-items: center;
+
+  &-code {
+    color: @B700;
+  }
+
+  &-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+
+  &-subtitle {
+    margin: 10px 0 20px 0;
+  }
+
+  .item {
+    img {
+      height: 260px;
+    }
+
+    .text {
+      text-align: center;
+    }
+  }
+}
