@@ -12,11 +12,14 @@ import Layout from "./components/layout";
 import TujuanPembelajaran from "./pages/Guru/TujuanPembelajaran";
 import AnalisisPembelajaran from "./pages/Guru/AnalisisPembelajaran";
 import ErrorPage from "./pages/ErrorPage";
-import TambahSiswa from "./pages/Admin/TambahSiswa";
-import PilihKelas from "./pages/Admin/PilihKelas";
-import TambahKelas from "./pages/Admin/TambahKelas";
-import DaftarSiswa from "./pages/Admin/DaftarSiswa";
-import UpdateSiswa from "./pages/Admin/UpdateSiswa";
+import TambahSiswa from "./pages/Admin/Siswa/TambahSiswa";
+import PilihKelas from "./pages/Admin/Kelas/PilihKelas";
+import TambahKelas from "./pages/Admin/Kelas/TambahKelas";
+import DaftarSiswa from "./pages/Admin/Siswa/DaftarSiswa";
+import UpdateSiswa from "./pages/Admin/Siswa/UpdateSiswa";
+import DaftarMapel from "./pages/Admin/Mata-Pelajaran/DaftarMapel";
+import TambahMapel from "./pages/Admin/Mata-Pelajaran/TambahMapel";
+import UpdateMapel from "./pages/Admin/Mata-Pelajaran/UpdateMapel";
 
 function App() {
   const {idSiswa} = useParams()
@@ -69,6 +72,18 @@ function App() {
         {
           path: "/admin/tambah-kelas",
           element: <TambahKelas />
+        },
+        {
+          path: "/admin/daftar-mapel",
+          element: <DaftarMapel />
+        },
+        {
+          path: "/admin/tambah-mapel",
+          element: <TambahMapel />
+        },
+        {
+          path: "/admin/edit-mapel/:idMapel",
+          element: <UpdateMapel />
         },
       ]
     },

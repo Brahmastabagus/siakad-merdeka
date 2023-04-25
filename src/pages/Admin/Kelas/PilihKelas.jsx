@@ -3,7 +3,7 @@ import { Table, Pagination, Stack, InputGroup, Input, DOMHelper, Panel, Breadcru
 import SearchIcon from '@rsuite/icons/Search';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getKelas, kelasSelector } from '../../store/kelasSlice';
+import { getKelas, kelasSelector } from '../../../store/kelasSlice';
 
 const { Column, HeaderCell, Cell } = Table;
 const { getHeight } = DOMHelper;

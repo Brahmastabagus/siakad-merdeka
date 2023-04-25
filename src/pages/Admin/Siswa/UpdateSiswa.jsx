@@ -1,11 +1,11 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { Breadcrumb, Panel, Form, Button, ButtonToolbar, Schema, InputPicker, InputNumber, DatePicker, InputGroup, Input, toaster } from 'rsuite'
-import { setSiswa, update } from '../../store/siswaSlice';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Breadcrumb, Panel, Form, Button, ButtonToolbar, Schema, InputGroup, Input } from 'rsuite'
+import { getSiswa, siswaSelector, updateSiswa } from '../../../store/siswaSlice';
 import EyeIcon from '@rsuite/icons/legacy/Eye';
 import EyeSlashIcon from '@rsuite/icons/legacy/EyeSlash';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const { StringType, NumberType } = Schema.Types;
@@ -13,7 +13,7 @@ const model = Schema.Model({
   nisn: NumberType("NISN harus angka").isRequired('Inputan harus diisi.'),
   nis: NumberType("NIS harus angka").isRequired('Inputan harus diisi.'),
   nama_lengkap: StringType().isRequired('Inputan harus diisi.'),
-  // alamat: StringType().isRequired('Inputan harus diisi.'),
+  alamat: StringType().isRequired('Inputan harus diisi.'),
   no_telp: NumberType('No telp harus angka').pattern(/^(\+62|62|0)8[1-9][0-9]{6,9}$/, 'No telp harus sesuai dengan no telp pada umumnya').isRequired('Inputan harus diisi.'),
   email: StringType().isEmail('Email required'),
   password: StringType().isRequired('Inputan harus diisi.'),
@@ -21,47 +21,51 @@ const model = Schema.Model({
 });
 const Textarea = React.forwardRef((props, ref) => <Input {...props} ref={ref} as="textarea" />)
 
-const TambahSiswa = () => {
+const UpdateSiswa = () => {
   const formRef = React.useRef();
   const [formValue, setFormValue] = React.useState({});
+  const [defaultData, setDefaultData] = React.useState({});
   const [visible, setVisible] = React.useState(false);
   const navigate = useNavigate()
-
-  // const { title } = useSelector(state => state.siswa)
-  // const [loca, setLoca] = React.useState(useLocation());
-  // const dispatch = useDispatch()
-
-  // // React.useEffect(() => {
-  // // }, [locations])
-
-  // React.useEffect(() => {
-  //   const locations = loca.pathname.split("/")[2].split("-")
-  //   for (var i = 0; i < locations.length; i++) {
-  //     locations[i] = locations[i].charAt(0).toUpperCase() + locations[i].slice(1);
-  //   }
-
-  //   const title = locations.join(" ")
-  //   dispatch(update({title}))
-  //   console.log(dispatch(update({ title })));
-  // }, [])
-  // console.log(title);
-
+  const { idSiswa } = useParams()
   const dispatch = useDispatch()
 
+  const dispath = useDispatch()
+  const siswa = useSelector((state) => siswaSelector.selectById(state, idSiswa))
+
+  React.useEffect(() => {
+    dispath(getSiswa())
+  }, [dispath])
+
+
+  React.useEffect(() => {
+    if (siswa != undefined) {
+      setDefaultData(siswa)
+    }
+  }, [siswa])
+  
+  // console.log(siswa);
 
   const handleChange = () => {
     setVisible(!visible);
   };
 
   const handleSubmit = async () => {
-    // console.log(formValue, 'Form Value');
+    const selectedForm = ['nis', 'nisn', "nama_lengkap", "alamat", "no_telp", "email", "password", "tahun_masuk", "id"];
+    let data = Object.keys(formValue)
+      .filter(key => selectedForm.includes(key))
+      .reduce((obj, key) => {
+        obj[key] = formValue[key];
+        return obj;
+      }, {});
+    // console.log(data, 'Form Value');
     // console.log();
     if (formRef.current.check()) {
-      const res = await dispatch(setSiswa(formValue))
+      const res = await dispatch(updateSiswa(data))
 
       if (res.meta.requestStatus === "fulfilled") {
         // setTimeout(() => {
-        toast.success("Data berhasil ditambahkan", {
+        toast.success("Data berhasil diubah", {
           position: "top-center",
           autoClose: 1500,
           hideProgressBar: false,
@@ -93,6 +97,11 @@ const TambahSiswa = () => {
         <Form
           ref={formRef}
           onChange={setFormValue}
+          formValue={defaultData}
+          // onChange={defaultData => {
+          //   setFormValue(defaultData)
+          //   setDefaultData(defaultData)
+          // }}
           model={model}
         >
           <Form.Group controlId="nisn">
@@ -102,7 +111,12 @@ const TambahSiswa = () => {
               name="nisn"
               errorPlacement='bottomEnd'
               placeholder="31231... "
-            />
+              value={defaultData?.nisn}
+              onChange={(data) => {
+                setDefaultData({...defaultData, nisn: data})
+                // console.log(data)
+              }}
+              />
             <Form.HelpText>NISN harus diisi</Form.HelpText>
           </Form.Group>
           <Form.Group controlId="nis">
@@ -112,7 +126,9 @@ const TambahSiswa = () => {
               name="nis"
               errorPlacement='bottomEnd'
               placeholder="31231... "
-            />
+              value={defaultData?.nis}
+              onChange={(data) => setDefaultData({...defaultData, nis: data})}
+              />
             <Form.HelpText>NIS harus diisi</Form.HelpText>
           </Form.Group>
           <Form.Group controlId="nama_lengkap">
@@ -122,7 +138,9 @@ const TambahSiswa = () => {
               name="nama_lengkap"
               errorPlacement='bottomEnd'
               placeholder="Nama Lengkap"
-            />
+              value={defaultData?.nama_lengkap}
+              onChange={(data) => setDefaultData({...defaultData, nama_lengkap: data})}
+              />
             <Form.HelpText>Nama harus diisi</Form.HelpText>
           </Form.Group>
           <Form.Group controlId="alamat">
@@ -136,7 +154,9 @@ const TambahSiswa = () => {
               placeholder="Alamat Lengkap "
               rows={5}
               required
-            />
+              value={defaultData?.alamat}
+              onChange={(data) => setDefaultData({...defaultData, alamat: data})}
+              />
 
             <Form.HelpText>Alamat harus diisi</Form.HelpText>
           </Form.Group>
@@ -148,7 +168,9 @@ const TambahSiswa = () => {
               errorPlacement='bottomEnd'
               type='tel'
               placeholder="081234567890 "
-            />
+              value={defaultData?.no_telp}
+              onChange={(data) => setDefaultData({...defaultData, no_telp: data})}
+              />
             <Form.HelpText>No telp harus diisi</Form.HelpText>
           </Form.Group>
           <Form.Group controlId="email">
@@ -159,13 +181,22 @@ const TambahSiswa = () => {
               errorPlacement='bottomEnd'
               placeholder='test@gmail.com'
               required
-            />
+              value={defaultData?.email}
+              onChange={(data) => setDefaultData({...defaultData, email: data})}
+              />
             <Form.HelpText>Email harus diisi</Form.HelpText>
           </Form.Group>
           <Form.Group controlId="password">
             <Form.ControlLabel>Password</Form.ControlLabel>
             <InputGroup inside className='!w-[700px]'>
-              <Form.Control type={visible ? 'text' : 'password'} name="password" placeholder='Masukkan password' required />
+              <Form.Control
+              type={visible ? 'text' : 'password'}
+              name="password"
+              placeholder='Masukkan password'
+              required
+              value={defaultData?.password}
+              onChange={(data) => setDefaultData({...defaultData, password: data})}
+              />
               <InputGroup.Button onClick={handleChange}>
                 {visible ? <EyeIcon /> : <EyeSlashIcon />}
               </InputGroup.Button>
@@ -179,6 +210,8 @@ const TambahSiswa = () => {
               name="tahun_masuk"
               errorPlacement='bottomEnd'
               placeholder='Masukkan tahun masuk'
+              value={defaultData?.tahun_masuk}
+              onChange={(data) => setDefaultData({...defaultData, tahun_masuk: data})}
             />
             <Form.HelpText>Tahun Masuk harus diisi</Form.HelpText>
           </Form.Group>
@@ -194,4 +227,4 @@ const TambahSiswa = () => {
 
 }
 
-export default TambahSiswa
+export default UpdateSiswa

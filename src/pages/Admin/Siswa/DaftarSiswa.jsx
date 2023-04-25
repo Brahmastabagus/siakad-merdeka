@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import EditIcon from '@rsuite/icons/Edit';
 import TrashIcon from '@rsuite/icons/Trash';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteSiswa, getSiswa, siswaSelector } from '../../store/siswaSlice';
+import { deleteSiswa, getSiswa, siswaSelector } from '../../../store/siswaSlice';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import RemindIcon from '@rsuite/icons/legacy/Remind';

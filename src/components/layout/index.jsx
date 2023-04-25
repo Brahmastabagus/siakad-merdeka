@@ -60,6 +60,7 @@ const NavLink = React.forwardRef((props, ref) => {
 
 const Index = () => {
   const [expand, setExpand] = React.useState(true);
+  const [account, setAccount] = React.useState("");
   const [data, setData] = React.useState([]);
 
   const { title } = useSelector(state => state.siswaSlice)
@@ -74,6 +75,7 @@ const Index = () => {
   React.useEffect(() => {
     // let AC = user.roles[1];
     let AC = "admin";
+    setAccount(AC)
     for (const key of Object.keys(AL)) {
       if (AC.toLowerCase() === key.toLowerCase()) {
         setData(AL[key]);
@@ -92,7 +94,7 @@ const Index = () => {
         >
           <Sidenav.Header>
             <div style={headerStyles}>
-              <span className='truncate' style={{ marginLeft: 12 }}> Dashboard</span>
+              <span className='truncate' style={{ marginLeft: 12 }}> {account.toUpperCase()}</span>
             </div>
           </Sidenav.Header>
           <Sidenav expanded={expand} defaultOpenKeys={['3']} appearance="subtle">

@@ -2,7 +2,7 @@ import { createAsyncThunk, createEntityAdapter, createSlice } from "@reduxjs/too
 
 const arr = window.location.href.split("/")
 // console.log(arr[arr.length - 1]);
-const locations = arr[4].split("-")
+const locations = arr[4]?.split("-") ?? ["dashboard", "siswa"]
 for (var i = 0; i < locations.length; i++) {
   locations[i] = locations[i].charAt(0).toUpperCase() + locations[i].slice(1);
 }
