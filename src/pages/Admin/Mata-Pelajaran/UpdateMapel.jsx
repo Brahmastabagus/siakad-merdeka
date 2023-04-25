@@ -20,7 +20,7 @@ const UpdateMapel = () => {
   const formRef = React.useRef();
   const [formValue, setFormValue] = React.useState({});
   const [defaultData, setDefaultData] = React.useState({});
-  const [tingkatan, setTingkatan] = React.useState(defaultData?.tingkatan_id);
+  const [tingkatan, setTingkatan] = React.useState();
   const [tingkat, setTingkat] = React.useState([])
   const [tingkatList, setTingkatList] = React.useState([])
   const tingkatApi = `${import.meta.env.VITE_API}/master/tingkat-pendidikan`
@@ -48,6 +48,7 @@ const UpdateMapel = () => {
   React.useEffect(() => {
     tingkatAPI()
   }, [])
+
 
   const updateData = () => {
     if (tingkatList.length === 0) {
@@ -80,14 +81,17 @@ const UpdateMapel = () => {
   React.useEffect(() => {
     if (mapel != undefined) {
       setDefaultData(mapel)
+      if (defaultData.tingkatan_id != undefined) {
+        setTingkatan(defaultData?.tingkatan_id)
+      }
     }
   }, [mapel])
 
   const handleSubmit = async () => {
-    // console.log(data, 'Form Value');
+    // console.log(formValue, 'Form Value');
     // console.log();
-    if (formRef.current.check()) {
-      const res = await dispatch(updateMapel(data))
+    if (formRef.current.check() && formValue != {}) {
+      const res = await dispatch(updateMapel(formValue))
 
       if (res.meta.requestStatus === "fulfilled") {
         // setTimeout(() => {
@@ -137,7 +141,7 @@ const UpdateMapel = () => {
               onChange={(data) => {
                 setDefaultData({ ...defaultData, nama_mapel: data })
               }}
-              />
+            />
             <Form.HelpText>Nama Mapel harus diisi</Form.HelpText>
           </Form.Group>
 
@@ -152,7 +156,7 @@ const UpdateMapel = () => {
               onChange={(data) => {
                 setDefaultData({ ...defaultData, kode_mapel: data })
               }}
-              />
+            />
             <Form.HelpText>Kode Mapel harus diisi</Form.HelpText>
           </Form.Group>
 
@@ -170,7 +174,7 @@ const UpdateMapel = () => {
               onChange={(data) => {
                 setDefaultData({ ...defaultData, deskripsi_mapel: data })
               }}
-              />
+            />
             <Form.HelpText>Deskripsi Mapel harus diisi</Form.HelpText>
           </Form.Group>
 
@@ -182,10 +186,10 @@ const UpdateMapel = () => {
               data={tingkat}
               style={{ width: 224 }}
               // onOpen={updateData}
-              onSearch={updateData}
+              // onSearch={updateData}
               // renderMenu={menuTingkat}
               name='tingkatan_id'
-              value={1}
+              value={parseInt(defaultData?.tingkatan_id)}
               onChange={(data) => {
                 setDefaultData({ ...defaultData, tingkatan_id: data })
                 // console.log(data);

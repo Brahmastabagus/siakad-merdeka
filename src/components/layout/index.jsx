@@ -97,7 +97,7 @@ const Index = () => {
               <span className='truncate' style={{ marginLeft: 12 }}> {account.toUpperCase()}</span>
             </div>
           </Sidenav.Header>
-          <Sidenav expanded={expand} defaultOpenKeys={['3']} appearance="subtle">
+          <Sidenav expanded={expand} defaultOpenKeys={active} appearance="subtle">
             <Sidenav.Body>
               {/* <Nav>
                 <Nav.Item eventKey="1" active icon={<DashboardIcon />}>

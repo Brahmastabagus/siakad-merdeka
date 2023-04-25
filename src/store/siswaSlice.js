@@ -34,7 +34,6 @@ export const setSiswa = createAsyncThunk("siswa/setSiswa", async (data) => {
 })
 
 export const updateSiswa = createAsyncThunk("siswa/updateSiswa", async (data) => {
-  console.log(data);
   const response = await fetch(`${siswaAPI}/${data.id}`,
   {
     method: "PUT",

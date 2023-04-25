@@ -4,7 +4,7 @@ import PageIcon from '@rsuite/icons/Page';
 
 const Admin = [
   {
-    id: "1",
+    id: "Siswa",
     title: "Siswa",
     // route: "/juri/guru",
     icon: UserBadgeIcon,
@@ -24,7 +24,7 @@ const Admin = [
     ]
   },
   {
-    id: "2",
+    id: "Kelas",
     title: "Kelas",
     // route: "/juri/guru",
     icon: PeoplesIcon,
@@ -44,7 +44,7 @@ const Admin = [
     ]
   },
   {
-    id: "3",
+    id: "Mapel",
     title: "Mapel",
     // route: "/juri/guru",
     icon: PageIcon,

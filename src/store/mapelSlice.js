@@ -34,7 +34,6 @@ export const setMapel = createAsyncThunk("mapel/setMapel", async (data) => {
 })
 
 export const updateMapel = createAsyncThunk("mapel/updateMapel", async (data) => {
-  console.log(data);
   const response = await fetch(`${mapelAPI}/${data.id}`,
     {
       method: "PUT",
