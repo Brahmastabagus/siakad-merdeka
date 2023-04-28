@@ -20,9 +20,7 @@ const UpdateMapel = () => {
   const formRef = React.useRef();
   const [formValue, setFormValue] = React.useState({});
   const [defaultData, setDefaultData] = React.useState({});
-  const [tingkatan, setTingkatan] = React.useState();
   const [tingkat, setTingkat] = React.useState([])
-  const [tingkatList, setTingkatList] = React.useState([])
   const tingkatApi = `${import.meta.env.VITE_API}/master/tingkat-pendidikan`
   const navigate = useNavigate()
 
@@ -49,24 +47,6 @@ const UpdateMapel = () => {
     tingkatAPI()
   }, [])
 
-
-  const updateData = () => {
-    if (tingkatList.length === 0) {
-      setTingkatList(tingkat);
-    }
-  };
-
-  const menuTingkat = menu => {
-    if (tingkatList.length === 0) {
-      return (
-        <p style={{ padding: 4, color: '#999', textAlign: 'center' }}>
-          <SpinnerIcon spin /> Loading...
-        </p>
-      );
-    }
-    return menu;
-  };
-
   const { idMapel } = useParams()
   const dispatch = useDispatch()
 
@@ -81,9 +61,6 @@ const UpdateMapel = () => {
   React.useEffect(() => {
     if (mapel != undefined) {
       setDefaultData(mapel)
-      if (defaultData.tingkatan_id != undefined) {
-        setTingkatan(defaultData?.tingkatan_id)
-      }
     }
   }, [mapel])
 
@@ -129,11 +106,12 @@ const UpdateMapel = () => {
           onChange={setFormValue}
           formValue={defaultData}
           model={model}
+          fluid
         >
           <Form.Group controlId="nama_mapel">
             <Form.ControlLabel>Nama Mapel</Form.ControlLabel>
             <Form.Control
-              className='!w-[700px]'
+              // className='!w-[700px]'
               name="nama_mapel"
               errorPlacement='bottomEnd'
               placeholder="Matematika "
@@ -148,7 +126,7 @@ const UpdateMapel = () => {
           <Form.Group controlId="kode_mapel">
             <Form.ControlLabel>Kode Mapel</Form.ControlLabel>
             <Form.Control
-              className='!w-[700px]'
+              // className='!w-[700px]'
               name="kode_mapel"
               errorPlacement='bottomEnd'
               placeholder="MTK0123 "
@@ -163,7 +141,7 @@ const UpdateMapel = () => {
           <Form.Group controlId="deskripsi_mapel">
             <Form.ControlLabel>Deskripsi Mapel</Form.ControlLabel>
             <Form.Control
-              className='!w-[700px]'
+              // className='!w-[700px]'
               accepter={Textarea}
               name="deskripsi_mapel"
               errorPlacement='bottomEnd'
@@ -181,13 +159,11 @@ const UpdateMapel = () => {
           <Form.Group controlId="tingkat">
             <Form.ControlLabel>Pilih Tingkatan</Form.ControlLabel>
             <Form.Control
-              className='!w-[700px]'
+              // className='!w-[700px]'
               accepter={SelectPicker}
               data={tingkat}
               style={{ width: 224 }}
-              // onOpen={updateData}
-              // onSearch={updateData}
-              // renderMenu={menuTingkat}
+              cleanable={false}
               name='tingkatan_id'
               value={parseInt(defaultData?.tingkatan_id)}
               onChange={(data) => {

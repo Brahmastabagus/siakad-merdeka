@@ -99,11 +99,11 @@ const TambahKelas = () => {
         }
         shaded
       >
-        <Form onChange={setFormValue} ref={formRef}>
+        <Form onChange={setFormValue} ref={formRef} fluid>
           <Form.Group controlId="kode_kelas">
             <Form.ControlLabel>Kode Kelas</Form.ControlLabel>
             <Form.Control
-              className='!w-[700px]'
+              // className='!w-[700px]'
               name="kode_kelas"
               errorPlacement='bottomEnd'
               accepter={InputNumber}
@@ -114,7 +114,7 @@ const TambahKelas = () => {
           <Form.Group controlId="lembaga">
             <Form.ControlLabel>Pilih Lembaga</Form.ControlLabel>
             <Form.Control
-              className='!w-[700px]'
+              // className='!w-[700px]'
               accepter={SelectPicker}
               data={lembagaList}
               style={{ width: 224 }}
@@ -128,7 +128,7 @@ const TambahKelas = () => {
           <Form.Group controlId="tahun">
             <Form.ControlLabel>Pilih Tahun Ajaran</Form.ControlLabel>
             <Form.Control
-              className='!w-[700px]'
+              // className='!w-[700px]'
               accepter={SelectPicker}
               data={tahunList}
               style={{ width: 224 }}

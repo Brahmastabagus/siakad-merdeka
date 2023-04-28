@@ -1,6 +1,7 @@
 import PeoplesIcon from '@rsuite/icons/Peoples';
 import UserBadgeIcon from '@rsuite/icons/UserBadge';
 import PageIcon from '@rsuite/icons/Page';
+import CreativeIcon from '@rsuite/icons/Creative';
 
 const Admin = [
   {
@@ -54,6 +55,20 @@ const Admin = [
         id: "Daftar Mapel",
         childtitle: "Daftar Mapel",
         childlink: "/admin/daftar-mapel",
+      },
+    ]
+  },
+  {
+    id: "Guru",
+    title: "Guru",
+    // route: "/juri/guru",
+    icon: CreativeIcon,
+    child: [
+      {
+        // id: "1-1",
+        id: "Daftar Guru",
+        childtitle: "Daftar Guru",
+        childlink: "/admin/daftar-guru",
       },
     ]
   },

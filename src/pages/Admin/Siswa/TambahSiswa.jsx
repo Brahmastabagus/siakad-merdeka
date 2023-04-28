@@ -94,11 +94,12 @@ const TambahSiswa = () => {
           ref={formRef}
           onChange={setFormValue}
           model={model}
+          fluid
         >
           <Form.Group controlId="nisn">
             <Form.ControlLabel>NISN</Form.ControlLabel>
             <Form.Control
-              className='!w-[700px]'
+              // className='!w-[700px]'
               name="nisn"
               errorPlacement='bottomEnd'
               placeholder="31231... "
@@ -108,7 +109,7 @@ const TambahSiswa = () => {
           <Form.Group controlId="nis">
             <Form.ControlLabel>NIS</Form.ControlLabel>
             <Form.Control
-              className='!w-[700px]'
+              // className='!w-[700px]'
               name="nis"
               errorPlacement='bottomEnd'
               placeholder="31231... "
@@ -118,7 +119,7 @@ const TambahSiswa = () => {
           <Form.Group controlId="nama_lengkap">
             <Form.ControlLabel>Nama Lengkap</Form.ControlLabel>
             <Form.Control
-              className='!w-[700px]'
+              // className='!w-[700px]'
               name="nama_lengkap"
               errorPlacement='bottomEnd'
               placeholder="Nama Lengkap"
@@ -128,7 +129,7 @@ const TambahSiswa = () => {
           <Form.Group controlId="alamat">
             <Form.ControlLabel>Alamat Lengkap</Form.ControlLabel>
             <Form.Control
-              className='!w-[700px]'
+              // className='!w-[700px]'
               // as="textarea"
               accepter={Textarea}
               name="alamat"
@@ -143,7 +144,7 @@ const TambahSiswa = () => {
           <Form.Group controlId="no_telp">
             <Form.ControlLabel>No telp</Form.ControlLabel>
             <Form.Control
-              className='!w-[700px]'
+              // className='!w-[700px]'
               name="no_telp"
               errorPlacement='bottomEnd'
               type='tel'
@@ -154,7 +155,7 @@ const TambahSiswa = () => {
           <Form.Group controlId="email">
             <Form.ControlLabel>Email</Form.ControlLabel>
             <Form.Control
-              className='!w-[700px]'
+              // className='!w-[700px]'
               name="email"
               errorPlacement='bottomEnd'
               placeholder='test@gmail.com'
@@ -164,7 +165,10 @@ const TambahSiswa = () => {
           </Form.Group>
           <Form.Group controlId="password">
             <Form.ControlLabel>Password</Form.ControlLabel>
-            <InputGroup inside className='!w-[700px]'>
+            <InputGroup
+              inside
+            // className='!w-[700px]'
+            >
               <Form.Control type={visible ? 'text' : 'password'} name="password" placeholder='Masukkan password' required />
               <InputGroup.Button onClick={handleChange}>
                 {visible ? <EyeIcon /> : <EyeSlashIcon />}
@@ -175,7 +179,7 @@ const TambahSiswa = () => {
           <Form.Group controlId="tahun_masuk">
             <Form.ControlLabel>Tahun Masuk</Form.ControlLabel>
             <Form.Control
-              className='!w-[700px]'
+              // className='!w-[700px]'
               name="tahun_masuk"
               errorPlacement='bottomEnd'
               placeholder='Masukkan tahun masuk'

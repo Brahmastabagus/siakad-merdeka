@@ -43,7 +43,7 @@ const UpdateSiswa = () => {
       setDefaultData(siswa)
     }
   }, [siswa])
-  
+
   // console.log(siswa);
 
   const handleChange = () => {
@@ -103,50 +103,51 @@ const UpdateSiswa = () => {
           //   setDefaultData(defaultData)
           // }}
           model={model}
+          fluid
         >
           <Form.Group controlId="nisn">
             <Form.ControlLabel>NISN</Form.ControlLabel>
             <Form.Control
-              className='!w-[700px]'
+              // className='!w-[700px]'
               name="nisn"
               errorPlacement='bottomEnd'
               placeholder="31231... "
               value={defaultData?.nisn}
               onChange={(data) => {
-                setDefaultData({...defaultData, nisn: data})
+                setDefaultData({ ...defaultData, nisn: data })
                 // console.log(data)
               }}
-              />
+            />
             <Form.HelpText>NISN harus diisi</Form.HelpText>
           </Form.Group>
           <Form.Group controlId="nis">
             <Form.ControlLabel>NIS</Form.ControlLabel>
             <Form.Control
-              className='!w-[700px]'
+              // className='!w-[700px]'
               name="nis"
               errorPlacement='bottomEnd'
               placeholder="31231... "
               value={defaultData?.nis}
-              onChange={(data) => setDefaultData({...defaultData, nis: data})}
-              />
+              onChange={(data) => setDefaultData({ ...defaultData, nis: data })}
+            />
             <Form.HelpText>NIS harus diisi</Form.HelpText>
           </Form.Group>
           <Form.Group controlId="nama_lengkap">
             <Form.ControlLabel>Nama Lengkap</Form.ControlLabel>
             <Form.Control
-              className='!w-[700px]'
+              // className='!w-[700px]'
               name="nama_lengkap"
               errorPlacement='bottomEnd'
               placeholder="Nama Lengkap"
               value={defaultData?.nama_lengkap}
-              onChange={(data) => setDefaultData({...defaultData, nama_lengkap: data})}
-              />
+              onChange={(data) => setDefaultData({ ...defaultData, nama_lengkap: data })}
+            />
             <Form.HelpText>Nama harus diisi</Form.HelpText>
           </Form.Group>
           <Form.Group controlId="alamat">
             <Form.ControlLabel>Alamat Lengkap</Form.ControlLabel>
             <Form.Control
-              className='!w-[700px]'
+              // className='!w-[700px]'
               // as="textarea"
               accepter={Textarea}
               name="alamat"
@@ -155,47 +156,50 @@ const UpdateSiswa = () => {
               rows={5}
               required
               value={defaultData?.alamat}
-              onChange={(data) => setDefaultData({...defaultData, alamat: data})}
-              />
+              onChange={(data) => setDefaultData({ ...defaultData, alamat: data })}
+            />
 
             <Form.HelpText>Alamat harus diisi</Form.HelpText>
           </Form.Group>
           <Form.Group controlId="no_telp">
             <Form.ControlLabel>No telp</Form.ControlLabel>
             <Form.Control
-              className='!w-[700px]'
+              // className='!w-[700px]'
               name="no_telp"
               errorPlacement='bottomEnd'
               type='tel'
               placeholder="081234567890 "
               value={defaultData?.no_telp}
-              onChange={(data) => setDefaultData({...defaultData, no_telp: data})}
-              />
+              onChange={(data) => setDefaultData({ ...defaultData, no_telp: data })}
+            />
             <Form.HelpText>No telp harus diisi</Form.HelpText>
           </Form.Group>
           <Form.Group controlId="email">
             <Form.ControlLabel>Email</Form.ControlLabel>
             <Form.Control
-              className='!w-[700px]'
+              // className='!w-[700px]'
               name="email"
               errorPlacement='bottomEnd'
               placeholder='test@gmail.com'
               required
               value={defaultData?.email}
-              onChange={(data) => setDefaultData({...defaultData, email: data})}
-              />
+              onChange={(data) => setDefaultData({ ...defaultData, email: data })}
+            />
             <Form.HelpText>Email harus diisi</Form.HelpText>
           </Form.Group>
           <Form.Group controlId="password">
             <Form.ControlLabel>Password</Form.ControlLabel>
-            <InputGroup inside className='!w-[700px]'>
+            <InputGroup
+              inside
+              // className='!w-[700px]'
+            >
               <Form.Control
-              type={visible ? 'text' : 'password'}
-              name="password"
-              placeholder='Masukkan password'
-              required
-              value={defaultData?.password}
-              onChange={(data) => setDefaultData({...defaultData, password: data})}
+                type={visible ? 'text' : 'password'}
+                name="password"
+                placeholder='Masukkan password'
+                required
+                value={defaultData?.password}
+                onChange={(data) => setDefaultData({ ...defaultData, password: data })}
               />
               <InputGroup.Button onClick={handleChange}>
                 {visible ? <EyeIcon /> : <EyeSlashIcon />}
@@ -206,12 +210,12 @@ const UpdateSiswa = () => {
           <Form.Group controlId="tahun_masuk">
             <Form.ControlLabel>Tahun Masuk</Form.ControlLabel>
             <Form.Control
-              className='!w-[700px]'
+              // className='!w-[700px]'
               name="tahun_masuk"
               errorPlacement='bottomEnd'
               placeholder='Masukkan tahun masuk'
               value={defaultData?.tahun_masuk}
-              onChange={(data) => setDefaultData({...defaultData, tahun_masuk: data})}
+              onChange={(data) => setDefaultData({ ...defaultData, tahun_masuk: data })}
             />
             <Form.HelpText>Tahun Masuk harus diisi</Form.HelpText>
           </Form.Group>

@@ -1,7 +1,10 @@
 import React from "react";
 import {
   createBrowserRouter,
+  createRoutesFromElements,
+  Route,
   RouterProvider,
+  Routes,
   useParams,
 } from "react-router-dom";
 // import { Routes, Route } from 'react-router-dom';
@@ -20,13 +23,18 @@ import UpdateSiswa from "./pages/Admin/Siswa/UpdateSiswa";
 import DaftarMapel from "./pages/Admin/Mata-Pelajaran/DaftarMapel";
 import TambahMapel from "./pages/Admin/Mata-Pelajaran/TambahMapel";
 import UpdateMapel from "./pages/Admin/Mata-Pelajaran/UpdateMapel";
+import PilihSiswa from "./pages/Admin/Kelas/PilihSiswa";
+import DaftarGuru from "./pages/Admin/Guru/DaftarGuru";
+import PilihPegawai from "./pages/Admin/Guru/PilihPegawai";
+import AuthMiddleware from "./middleware/AuthMiddleware";
+import Login from "./pages/Auth/Login/Login";
 
 function App() {
-  const {idSiswa} = useParams()
+  const { idSiswa } = useParams()
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <Layout />,
+      element: <Login />,
       errorElement: <ErrorPage />,
     },
     {
@@ -36,15 +44,15 @@ function App() {
       children: [
         {
           path: "/guru/tujuan-pembelajaran",
-          element: <TujuanPembelajaran />
+          element: <AuthMiddleware component={TujuanPembelajaran} auth="guru" />
         },
         {
           path: "/guru/tabel-pembelajaran",
-          element: <TabelPembelajaran />
+          element: <AuthMiddleware component={TabelPembelajaran} auth="guru" />
         },
         {
           path: "/guru/analisis-pembelajaran",
-          element: <AnalisisPembelajaran />
+          element: <AuthMiddleware component={AnalisisPembelajaran} auth="guru" />
         },
       ]
     },
@@ -55,35 +63,47 @@ function App() {
       children: [
         {
           path: "/admin/daftar-siswa",
-          element: <DaftarSiswa />
+          element: <AuthMiddleware component={DaftarSiswa} auth="admin" />
         },
         {
           path: "/admin/tambah-siswa",
-          element: <TambahSiswa />
+          element: <AuthMiddleware component={TambahSiswa} auth="admin" />
         },
         {
           path: "/admin/edit-siswa/:idSiswa",
-          element: <UpdateSiswa />
+          element: <AuthMiddleware component={UpdateSiswa} auth="admin" />
         },
         {
           path: "/admin/pilih-kelas",
-          element: <PilihKelas />
+          element: <AuthMiddleware component={PilihKelas} auth="admin" />
+        },
+        {
+          path: "/admin/pilih-siswa/:idSiswa",
+          element: <AuthMiddleware component={PilihSiswa} auth="admin" />
         },
         {
           path: "/admin/tambah-kelas",
-          element: <TambahKelas />
+          element: <AuthMiddleware component={TambahKelas} auth="admin" />
         },
         {
           path: "/admin/daftar-mapel",
-          element: <DaftarMapel />
+          element: <AuthMiddleware component={DaftarMapel} auth="admin" />
         },
         {
           path: "/admin/tambah-mapel",
-          element: <TambahMapel />
+          element: <AuthMiddleware component={TambahMapel} auth="admin" />
         },
         {
           path: "/admin/edit-mapel/:idMapel",
-          element: <UpdateMapel />
+          element: <AuthMiddleware component={UpdateMapel} auth="admin" />
+        },
+        {
+          path: "/admin/daftar-guru",
+          element: <AuthMiddleware component={DaftarGuru} auth="admin" />
+        },
+        {
+          path: "/admin/pilih-pegawai",
+          element: <AuthMiddleware component={PilihPegawai} auth="admin" />
         },
       ]
     },
@@ -91,6 +111,24 @@ function App() {
 
   return (
     <RouterProvider router={router}></RouterProvider>
+    // <Routes>
+    //   <Route path="/guru" element={<Layout />}>
+    //     <Route path="" element={<AuthMiddleware component={} />} />
+    //     <Route path="" element={<AuthMiddleware component={} />} />
+    //     <Route path="" element={<AuthMiddleware component={} />} />
+    //     <Route path="" element={<AuthMiddleware component={} />} />
+    //     <Route path="" element={<AuthMiddleware component={} />} />
+    //     <Route path="" element={<AuthMiddleware component={} />} />
+    //     <Route path="" element={<AuthMiddleware component={} />} />
+    //     <Route path="" element={<AuthMiddleware component={} />} />
+    //     <Route path="" element={<AuthMiddleware component={} />} />
+    //     <Route path="" element={<AuthMiddleware component={} />} />
+    //     <Route path="" element={<AuthMiddleware component={} />} />
+    //     <Route path="" element={<AuthMiddleware component={} />} />
+    //     <Route path="" element={<AuthMiddleware component={} />} />
+    //     <Route path="" element={<AuthMiddleware component={} />} />
+    //   </Route>
+    // </Routes>
     // <>
     //   <Routes>
     //     <Route path="/" element={<Frame navs={appNavs} />}>

@@ -106,12 +106,13 @@ const TambahMapel = () => {
           ref={formRef}
           onChange={setFormValue}
           model={model}
+          fluid
         >
           
           <Form.Group controlId="nama_mapel">
             <Form.ControlLabel>Nama Mapel</Form.ControlLabel>
             <Form.Control
-              className='!w-[700px]'
+              // className='!w-[700px]'
               name="nama_mapel"
               errorPlacement='bottomEnd'
               placeholder="Matematika "
@@ -122,7 +123,7 @@ const TambahMapel = () => {
           <Form.Group controlId="kode_mapel">
             <Form.ControlLabel>Kode Mapel</Form.ControlLabel>
             <Form.Control
-              className='!w-[700px]'
+              // className='!w-[700px]'
               name="kode_mapel"
               errorPlacement='bottomEnd'
               placeholder="MTK0123 "
@@ -133,7 +134,7 @@ const TambahMapel = () => {
           <Form.Group controlId="deskripsi_mapel">
             <Form.ControlLabel>Deskripsi Mapel</Form.ControlLabel>
             <Form.Control
-              className='!w-[700px]'
+              // className='!w-[700px]'
               accepter={Textarea}
               name="deskripsi_mapel"
               errorPlacement='bottomEnd'
@@ -147,10 +148,9 @@ const TambahMapel = () => {
           <Form.Group controlId="tingkat">
             <Form.ControlLabel>Pilih Tingkatan</Form.ControlLabel>
             <Form.Control
-              className='!w-[700px]'
+              className='!w-full'
               accepter={SelectPicker}
               data={tingkatList}
-              style={{ width: 224 }}
               onOpen={updateData}
               onSearch={updateData}
               renderMenu={menuTingkat}

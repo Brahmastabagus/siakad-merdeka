@@ -34,7 +34,7 @@ const PilihKelas = () => {
       })
     })
 
-    if (new Date().getMonth() < 8) {
+    if (new Date().getMonth() < 2) {
       let tahun = {
           data: datas.find((data) => {
           // console.log(data);
@@ -73,7 +73,7 @@ const PilihKelas = () => {
   
   React.useEffect(() => {
     setDefaultData(kelas)
-    filter()
+    // filter()
   }, [kelas])
 
 
@@ -194,14 +194,16 @@ const PilihKelas = () => {
     return filtered;
   };
 
-  const filter = () => {
-    if (activeTahun != undefined) {
-      setDefaultData(kelas.filter((data) => {
-        return data.id === activeTahun
-      }))
+  // const filter = () => {
+  //   if (activeTahun != undefined) {
+  //     console.log(
+  //     kelas.filter((data) => {
+  //       return data.id === activeTahun
+  //     })
+  //     )
       
-    }
-  }
+  //   }
+  // }
 
   // const handleClean = () => {
   //   setActiveTahun(undefined)
@@ -256,7 +258,7 @@ const PilihKelas = () => {
             onSelect={(e) => setActiveTahun(e) }
             // onClean={handleClean}
              />
-          <h1>{activeTahun}</h1>
+          {/* <h1>{activeTahun}</h1> */}
 
           <InputGroup inside>
             <Input placeholder="Search" value={searchKeyword} onChange={setSearchKeyword} />
@@ -306,12 +308,12 @@ const PilihKelas = () => {
             </Cell>
           </Column>
 
-          <Column width={110} align="center" fixed>
+          <Column width={115} align="center" fixed>
             <HeaderCell>Detail</HeaderCell>
             <Cell style={{ padding: '6px' }}>
               {rowData => (
                 <>
-                  <Button appearance="link" onClick={() => navigate(`${rowData.id}`)}>
+                  <Button className='bg-slate-200 hover:bg-slate-400 hover:text-white group' onClick={() => navigate(`${rowData.id}`)}>
                     Detail Siswa
                   </Button>
                 </>
@@ -324,7 +326,7 @@ const PilihKelas = () => {
             <Cell style={{ padding: '6px' }}>
               {rowData => (
                 <>
-                  <Button appearance="link" onClick={() => navigate(`${rowData.id}`)}>
+                  <Button className='bg-slate-200 hover:bg-slate-400 hover:text-white group' onClick={() => navigate(`/admin/pilih-siswa/${rowData.id}`)}>
                     Pilih Siswa
                   </Button>
                 </>
