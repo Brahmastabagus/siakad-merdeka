@@ -27,7 +27,12 @@ import PilihSiswa from "./pages/Admin/Kelas/PilihSiswa";
 import DaftarGuru from "./pages/Admin/Guru/DaftarGuru";
 import PilihPegawai from "./pages/Admin/Guru/PilihPegawai";
 import AuthMiddleware from "./middleware/AuthMiddleware";
-import Login from "./pages/Auth/Login/Login";
+import Login from "./pages/Auth/Login";
+import Register from "./pages/Auth/Register";
+import LupaPassword from "./pages/Auth/LupaPassword";
+import DaftarTahunAjaran from "./pages/Admin/Tahun-Ajaran/DaftarTahunAjaran";
+import TambahTahunAjaran from "./pages/Admin/Tahun-Ajaran/TambahTahunAjaran";
+import UpdateTahunAjaran from "./pages/Admin/Tahun-Ajaran/UpdateTahunAjaran";
 
 function App() {
   const { idSiswa } = useParams()
@@ -35,6 +40,16 @@ function App() {
     {
       path: "/",
       element: <Login />,
+      errorElement: <ErrorPage />,
+    },
+    {
+      path: "/register",
+      element: <Register />,
+      errorElement: <ErrorPage />,
+    },
+    {
+      path: "/lupa-password",
+      element: <LupaPassword />,
       errorElement: <ErrorPage />,
     },
     {
@@ -63,47 +78,73 @@ function App() {
       children: [
         {
           path: "/admin/daftar-siswa",
-          element: <AuthMiddleware component={DaftarSiswa} auth="admin" />
+          element: <AuthMiddleware component={DaftarSiswa} auth="admin" />,
+          errorElement: <ErrorPage />,
         },
         {
           path: "/admin/tambah-siswa",
-          element: <AuthMiddleware component={TambahSiswa} auth="admin" />
+          element: <AuthMiddleware component={TambahSiswa} auth="admin" />,
+          errorElement: <ErrorPage />,
         },
         {
           path: "/admin/edit-siswa/:idSiswa",
-          element: <AuthMiddleware component={UpdateSiswa} auth="admin" />
+          element: <AuthMiddleware component={UpdateSiswa} auth="admin" />,
+          errorElement: <ErrorPage />,
         },
         {
           path: "/admin/pilih-kelas",
-          element: <AuthMiddleware component={PilihKelas} auth="admin" />
+          element: <AuthMiddleware component={PilihKelas} auth="admin" />,
+          errorElement: <ErrorPage />,
         },
         {
           path: "/admin/pilih-siswa/:idSiswa",
-          element: <AuthMiddleware component={PilihSiswa} auth="admin" />
+          element: <AuthMiddleware component={PilihSiswa} auth="admin" />,
+          errorElement: <ErrorPage />,
         },
         {
           path: "/admin/tambah-kelas",
-          element: <AuthMiddleware component={TambahKelas} auth="admin" />
+          element: <AuthMiddleware component={TambahKelas} auth="admin" />,
+          errorElement: <ErrorPage />,
         },
         {
           path: "/admin/daftar-mapel",
-          element: <AuthMiddleware component={DaftarMapel} auth="admin" />
+          element: <AuthMiddleware component={DaftarMapel} auth="admin" />,
+          errorElement: <ErrorPage />,
         },
         {
           path: "/admin/tambah-mapel",
-          element: <AuthMiddleware component={TambahMapel} auth="admin" />
+          element: <AuthMiddleware component={TambahMapel} auth="admin" />,
+          errorElement: <ErrorPage />,
         },
         {
           path: "/admin/edit-mapel/:idMapel",
-          element: <AuthMiddleware component={UpdateMapel} auth="admin" />
+          element: <AuthMiddleware component={UpdateMapel} auth="admin" />,
+          errorElement: <ErrorPage />,
         },
         {
           path: "/admin/daftar-guru",
-          element: <AuthMiddleware component={DaftarGuru} auth="admin" />
+          element: <AuthMiddleware component={DaftarGuru} auth="admin" />,
+          errorElement: <ErrorPage />,
         },
         {
           path: "/admin/pilih-pegawai",
-          element: <AuthMiddleware component={PilihPegawai} auth="admin" />
+          element: <AuthMiddleware component={PilihPegawai} auth="admin" />,
+          errorElement: <ErrorPage />,
+        },
+        {
+          path: "/admin/daftar-tahun-ajaran",
+          element: <AuthMiddleware component={DaftarTahunAjaran} auth="admin" />,
+          errorElement: <ErrorPage />,
+        },
+        {
+          path: "/admin/tambah-tahun-ajaran",
+          element: <AuthMiddleware component={TambahTahunAjaran} auth="admin" />,
+          errorElement: <ErrorPage />,
+        },
+        {
+          path: "/admin/edit-tahun-ajaran/:idTahunAjaran",
+          element: <AuthMiddleware component={UpdateTahunAjaran} auth="admin" />,
+          errorElement: <ErrorPage />,
         },
       ]
     },

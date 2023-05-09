@@ -1,5 +1,5 @@
 import React from 'react'
-import { Container, Sidebar, Sidenav, Content, Navbar, Nav, FlexboxGrid } from 'rsuite';
+import { Container, Sidebar, Sidenav, Content, Navbar, Nav, DOMHelper } from 'rsuite';
 import Header from './Header'
 import { Icon } from '@rsuite/icons';
 import CogIcon from '@rsuite/icons/legacy/Cog';
@@ -14,6 +14,8 @@ import { Link, Outlet } from 'react-router-dom';
 import * as AL from '../../data/index'
 import { useDispatch, useSelector } from 'react-redux';
 import { update } from '../../store/siswaSlice';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 // import * as AL from "./accessLevel/index";
 
 const headerStyles = {
@@ -32,7 +34,7 @@ const NavToggle = ({ expand, onChange }) => {
       <Nav>
         <Nav.Menu
           noCaret
-          placement="topStart"
+          placement="rightStart"
           trigger="click"
           title={<CogIcon style={{ width: 20, height: 20 }} size="sm" />}
         >
@@ -58,10 +60,13 @@ const NavLink = React.forwardRef((props, ref) => {
   );
 });
 
+const { getWidth } = DOMHelper
+
 const Index = () => {
   const [expand, setExpand] = React.useState(true);
   const [account, setAccount] = React.useState("");
   const [data, setData] = React.useState([]);
+  const headerRef = React.useRef()
 
   const { title } = useSelector(state => state.siswaSlice)
   const [active, setActive] = React.useState(title);
@@ -83,7 +88,13 @@ const Index = () => {
     }
   }, [data]);
 
-  // console.log(data);
+  React.useEffect(() => {
+    if (getWidth(headerRef.current) < 1100) {
+      setExpand(false)
+    } else {
+      setExpand(true)
+    }
+  }, [])
   return (
     <div className="show-fake-browser sidebar-page">
       <Container>
@@ -140,7 +151,7 @@ const Index = () => {
                     <>
                       <Nav.Menu
                         eventKey={id}
-                        trigger="hover"
+                        trigger="click"
                         title={title}
                         icon={<Icon as={icon} />}
                         placement="rightStart"
@@ -162,9 +173,10 @@ const Index = () => {
           <NavToggle expand={expand} onChange={() => setExpand(!expand)} />
         </Sidebar>
 
-        <Container className='bg-neutral-100'>
+        <Container ref={headerRef} className='bg-neutral-100'>
           <Header title={active} />
           <Content className='m-5 bg-white rounded-md min-h-screen'>
+            <ToastContainer />
             <Outlet />
           </Content>
         </Container>

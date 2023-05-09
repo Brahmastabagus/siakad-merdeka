@@ -8,6 +8,8 @@ import {
   Avatar,
 } from 'rsuite';
 import HelpOutlineIcon from '@rsuite/icons/HelpOutline';
+import { Link, useNavigate } from 'react-router-dom';
+import Cookies from 'universal-cookie';
 
 const renderAdminSpeaker = ({ onClose, left, top, className }, ref) => {
   const handleSelect = eventKey => {
@@ -41,7 +43,17 @@ const renderAdminSpeaker = ({ onClose, left, top, className }, ref) => {
   );
 };
 
-const Header = ({title}) => {
+const Header = ({ title }) => {
+  const navigate = useNavigate()
+  const cookies = new Cookies()
+  const handleLogout = () => {
+    cookies.remove("token", {
+      path: "/",
+      expires: new Date(new Date().getTime() + 200 * 1000)
+    });
+    navigate("/")
+  }
+
   return (
     <Navbar className="bg-white shadow">
       <Navbar.Brand>{title}</Navbar.Brand>
@@ -65,7 +77,9 @@ const Header = ({title}) => {
           <Dropdown.Item>Feedback</Dropdown.Item>
           <Dropdown.Item divider />
           <Dropdown.Item>Settings</Dropdown.Item>
-          <Dropdown.Item>Sign out</Dropdown.Item>
+          {/* <Link className='hover:no-underline' to={"/"}> */}
+          <Dropdown.Item onClick={handleLogout}>Sign out</Dropdown.Item>
+          {/* </Link> */}
           <Dropdown.Item
             icon={<HelpOutlineIcon />}
             href="https://rsuitejs.com"
