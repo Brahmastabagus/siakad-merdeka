@@ -192,11 +192,10 @@ const DaftarTahunAjaran = () => {
           onSortColumn={handleSortColumn}
           wordWrap="break-word">
 
-          <Column flexGrow={1} align="center" fullText fixed>
+          {/* <Column flexGrow={1} align="center" fullText fixed>
             <HeaderCell>Kode</HeaderCell>
-            {/* <Cell dataKey="name" /> */}
             <Cell>{`${Object.keys(index)}`}</Cell>
-          </Column>
+          </Column> */}
 
           <Column flexGrow={1} align="center" fullText fixed>
             <HeaderCell>Kode</HeaderCell>

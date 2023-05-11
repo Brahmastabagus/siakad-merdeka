@@ -45,6 +45,10 @@ const loginSlice = createSlice({
       .addCase(getLogin.fulfilled, (state, action) => {
         loginEntity.setAll(state, action.payload)
       })
+      .addCase(getLogin.rejected, (state, action) => {
+        loginEntity.setAll(state, action.payload)
+        console.log(state, action.payload);
+      })
   }
 })
 

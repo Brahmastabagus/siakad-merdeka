@@ -30,6 +30,24 @@ const DaftarMapel = () => {
   };
   const handleClose = () => setOpen(false);
 
+  // const tahunAPI = `${import.meta.env.VITE_API}/tahun-ajaran`
+
+  // const dataAPI = async () => {
+  //   const response = await fetch(tahunAPI)
+  //   const json = await response.json()
+  //   const data = await json
+
+  //   console.log(json);
+
+  //   // if (response.status === 200) {
+  //   //   setDefaultData(data)
+  //   // }
+  // }
+
+  // React.useEffect(() => {
+  //   dataAPI()
+  // }, [])
+
   const dispath = useDispatch()
   const mapel = useSelector(mapelSelector.selectAll)
 
@@ -39,7 +57,9 @@ const DaftarMapel = () => {
 
 
   React.useEffect(() => {
-    setDefaultData(mapel)
+    // setDefaultData(mapel)
+    // console.log(mapel);
+    setDefaultData(mapel != "Tidak ada data" ? mapel : [])
   }, [mapel])
 
   const handleChangeLimit = dataKey => {
@@ -60,7 +80,7 @@ const DaftarMapel = () => {
 
   const filteredData = () => {
     const filtered = data.filter(item => {
-      if (item.nama_mapel.toLowerCase() != undefined && !item.nama_mapel.toLowerCase().includes(searchKeyword.toLowerCase())) {
+      if (item.name.toLowerCase() != undefined && !item.name.toLowerCase().includes(searchKeyword.toLowerCase())) {
         return false;
       }
 
@@ -110,8 +130,8 @@ const DaftarMapel = () => {
         header={
           <>
             <Breadcrumb>
-              <Breadcrumb.Item>Instrumen 1</Breadcrumb.Item>
-              <Breadcrumb.Item active>Tabel</Breadcrumb.Item>
+              <Breadcrumb.Item>Tahun Ajaran</Breadcrumb.Item>
+              <Breadcrumb.Item active>Mata Pelajaran</Breadcrumb.Item>
             </Breadcrumb>
           </>
         }
@@ -140,29 +160,40 @@ const DaftarMapel = () => {
           onSortColumn={handleSortColumn}
           wordWrap="break-word">
 
-          <Column width={150} align="center" fixed>
-            <HeaderCell>Nama Mapel</HeaderCell>
-            <Cell dataKey="nama_mapel" />
-          </Column>
-
-          <Column width={150} align="center" fixed>
+          <Column width={120} align="center" fixed>
             <HeaderCell>Kode Mapel</HeaderCell>
-            <Cell dataKey="kode_mapel" />
+            {/* <Cell dataKey="nama_mapel" /> */}
+            <Cell>{rowData => `${rowData?.kode}`}</Cell>
           </Column>
 
           <Column flexGrow={1} align="center" fullText fixed>
-            <HeaderCell>Deskripsi Mapel</HeaderCell>
-            <Cell dataKey="deskripsi_mapel" />
+            <HeaderCell>Nama Mapel</HeaderCell>
+            {/* <Cell dataKey="kode_mapel" /> */}
+            <Cell>{rowData => `${rowData?.name}`}</Cell>
           </Column>
 
-          <Column width={150} align="center">
-            <HeaderCell>Tingkat Pendidikan</HeaderCell>
-            <Cell>{rowData => `${rowData?.mtp?.tingkat_pendidikan}`}</Cell>
+          <Column width={140} align="center" fixed>
+            <HeaderCell>Kode Tahun Ajaran</HeaderCell>
+            {/* <Cell dataKey="deskripsi_mapel" /> */}
+            <Cell>{rowData => `${rowData?.tahun_ajaran?.kode}`}</Cell>
           </Column>
 
-          <Column width={150} align="center">
-            <HeaderCell>Jurusan</HeaderCell>
-            <Cell>{rowData => `${rowData?.mtp?.jurusan}`}</Cell>
+          <Column width={100} align="center" fixed>
+            <HeaderCell>Semester</HeaderCell>
+            {/* <Cell dataKey="deskripsi_mapel" /> */}
+            <Cell>{rowData => `${rowData?.tahun_ajaran?.semester}`}</Cell>
+          </Column>
+
+          <Column width={120} align="center" fixed>
+            <HeaderCell>NIP</HeaderCell>
+            {/* <Cell dataKey="deskripsi_mapel" /> */}
+            <Cell>{rowData => `${rowData?.user?.nip}`}</Cell>
+          </Column>
+
+          <Column flexGrow={1} align="center" fullText fixed>
+            <HeaderCell>Nama Guru</HeaderCell>
+            {/* <Cell dataKey="deskripsi_mapel" /> */}
+            <Cell>{rowData => `${rowData?.user?.name}`}</Cell>
           </Column>
 
           <Column width={100} align="center" fixed>

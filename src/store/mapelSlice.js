@@ -1,4 +1,5 @@
 import { createAsyncThunk, createEntityAdapter, createSlice } from "@reduxjs/toolkit";
+import Cookies from "universal-cookie";
 
 const arr = window.location.href.split("/")
 // console.log(arr[arr.length - 1]);
@@ -9,24 +10,35 @@ for (var i = 0; i < locations.length; i++) {
 
 const location = locations.join(" ")
 
-const mapelAPI = `${import.meta.env.VITE_API}/mata-pelajaran`
+const mapelAPI = `${import.meta.env.VITE_API}/mapel`
 
 export const getMapel = createAsyncThunk("mapel/getMapel", async () => {
-  const response = await fetch(mapelAPI)
+  const cookies = new Cookies()
+  let token = cookies.get("token")
+  const response = await fetch(mapelAPI, {
+    method: "GET",
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  })
   const json = await response.json()
 
   return json
 })
 
 export const setMapel = createAsyncThunk("mapel/setMapel", async (data) => {
+  const cookies = new Cookies()
+  let token = cookies.get("token")
   const response = await fetch(mapelAPI,
     {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
       },
       body: JSON.stringify(data)
     })
+    console.log(response, data);
 
   const json = await response.json()
 
@@ -34,11 +46,14 @@ export const setMapel = createAsyncThunk("mapel/setMapel", async (data) => {
 })
 
 export const updateMapel = createAsyncThunk("mapel/updateMapel", async (data) => {
+  const cookies = new Cookies()
+  let token = cookies.get("token")
   const response = await fetch(`${mapelAPI}/${data.id}`,
     {
       method: "PUT",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
       },
       body: JSON.stringify(data)
     })
@@ -49,8 +64,13 @@ export const updateMapel = createAsyncThunk("mapel/updateMapel", async (data) =>
 })
 
 export const deleteMapel = createAsyncThunk("mapel/deleteMapel", async (id) => {
+  const cookies = new Cookies()
+  let token = cookies.get("token")
   const response = await fetch(`${mapelAPI}/${id}`, {
-    method: "DELETE"
+    method: "DELETE",
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
   })
   const json = await response.json()
 

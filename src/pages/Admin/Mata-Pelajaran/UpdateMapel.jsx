@@ -6,6 +6,7 @@ import { getMapel, mapelSelector, updateMapel } from '../../../store/mapelSlice'
 import SpinnerIcon from '@rsuite/icons/legacy/Spinner';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Cookies from 'universal-cookie';
 
 const { StringType, NumberType } = Schema.Types;
 const model = Schema.Model({
@@ -20,32 +21,104 @@ const UpdateMapel = () => {
   const formRef = React.useRef();
   const [formValue, setFormValue] = React.useState({});
   const [defaultData, setDefaultData] = React.useState({});
-  const [tingkat, setTingkat] = React.useState([])
-  const tingkatApi = `${import.meta.env.VITE_API}/master/tingkat-pendidikan`
+  const [tahunAjaran, setTahunAjaran] = React.useState([])
+  const [tahunAjaranList, setTahunAjaranList] = React.useState([])
+  const [user, setUser] = React.useState([])
+  const [userList, setUserList] = React.useState([])
+  const tahunAjaranApi = `${import.meta.env.VITE_API}/tahun-ajaran`
+  const userApi = `${import.meta.env.VITE_API}/user`
   const navigate = useNavigate()
 
-  const tingkatAPI = async () => {
-    const response = await fetch(tingkatApi)
+  const tahunAjaranAPI = async () => {
+    const cookies = new Cookies()
+    let token = cookies.get("token")
+    const response = await fetch(tahunAjaranApi, {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    })
     const json = await response.json()
     const data = await json
-    const data_tingkat = []
+    const data_tahunAjaran = []
 
     data.map((data) => {
-      data_tingkat.push({
-        id: data.id,
-        label: data.tingkat_pendidikan,
-        value: data.id
-      })
+      // console.log(defaultData?.tahun_ajaran_id);
+      // if (data.id === defaultData?.tahun_ajaran_id) {
+      //   console.log(data.id, data.kode);
+      //   data_tahunAjaran.push({
+      //     id: data.id,
+      //     label: data.kode,
+      //     value: data.id
+      //   })
+      //   console.log(data_tahunAjaran);
+      // }
+      // if (data.mapel.length === 0) {
+        // console.log(data.kode);
+        data_tahunAjaran.push({
+          id: data.id,
+          label: data.kode,
+          value: data.id
+        })
+      // }
+      // console.log(data_tahunAjaran);
     })
 
     if (response.status === 200) {
-      setTingkat(data_tingkat)
+      setTahunAjaran(data_tahunAjaran)
+    }
+  }
+
+  const userAPI = async () => {
+    const cookies = new Cookies()
+    let token = cookies.get("token")
+    const response = await fetch(userApi, {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    })
+    const json = await response.json()
+    const data = await json
+    const data_user = []
+
+    data.map((data) => {
+      // if (data.mapel.length === 0) {
+        data_user.push({
+          id: data.id,
+          label: data.name,
+          value: data.id
+        })
+      // }
+    })
+
+    if (response.status === 200) {
+      setUser(data_user)
     }
   }
 
   React.useEffect(() => {
-    tingkatAPI()
+    tahunAjaranAPI()
+    userAPI()
   }, [])
+
+  const updateData = () => {
+    if (tahunAjaranList.length === 0 && userList.length === 0) {
+      setTahunAjaranList(tahunAjaran);
+      setUserList(user);
+    }
+  };
+
+  const menuList = menu => {
+    if (tahunAjaranList.length === 0 && userList.length === 0) {
+      return (
+        <p style={{ padding: 4, color: '#999', textAlign: 'center' }}>
+          <SpinnerIcon spin /> Loading...
+        </p>
+      );
+    }
+    return menu;
+  };
 
   const { idMapel } = useParams()
   const dispatch = useDispatch()
@@ -61,13 +134,19 @@ const UpdateMapel = () => {
   React.useEffect(() => {
     if (mapel != undefined) {
       setDefaultData(mapel)
+
+      if (tahunAjaranList.length === 0 && userList.length === 0) {
+        setTahunAjaranList(tahunAjaran);
+        setUserList(user);
+      }
+      // console.log(defaultData);
     }
   }, [mapel])
 
   const handleSubmit = async () => {
-    // console.log(formValue, 'Form Value');
+    console.log(formValue, 'Form Value');
     // console.log();
-    if (formRef.current.check() && formValue != {}) {
+    // if (formRef.current.check() && formValue != {}) {
       const res = await dispatch(updateMapel(formValue))
 
       if (res.meta.requestStatus === "fulfilled") {
@@ -85,7 +164,7 @@ const UpdateMapel = () => {
         // }, 100);
         navigate("/admin/daftar-mapel")
       }
-    }
+    // }
   };
   return (
     <>
@@ -93,9 +172,9 @@ const UpdateMapel = () => {
         header={
           <>
             <Breadcrumb separator=">">
-              <Breadcrumb.Item>Instrumen 1</Breadcrumb.Item>
+              <Breadcrumb.Item>Tahun Ajaran</Breadcrumb.Item>
               <Breadcrumb.Item href='/admin/daftar-mapel'>Daftar Mapel</Breadcrumb.Item>
-              <Breadcrumb.Item aria-current="page" active>Tambah Mapel</Breadcrumb.Item>
+              <Breadcrumb.Item aria-current="page" active>Update Mapel</Breadcrumb.Item>
             </Breadcrumb>
           </>
         }
@@ -108,70 +187,62 @@ const UpdateMapel = () => {
           model={model}
           fluid
         >
-          <Form.Group controlId="nama_mapel">
-            <Form.ControlLabel>Nama Mapel</Form.ControlLabel>
-            <Form.Control
-              // className='!w-[700px]'
-              name="nama_mapel"
-              errorPlacement='bottomEnd'
-              placeholder="Matematika "
-              value={defaultData?.nama_mapel}
-              onChange={(data) => {
-                setDefaultData({ ...defaultData, nama_mapel: data })
-              }}
-            />
-            <Form.HelpText>Nama Mapel harus diisi</Form.HelpText>
-          </Form.Group>
-
           <Form.Group controlId="kode_mapel">
             <Form.ControlLabel>Kode Mapel</Form.ControlLabel>
             <Form.Control
               // className='!w-[700px]'
-              name="kode_mapel"
+              name="kode"
               errorPlacement='bottomEnd'
               placeholder="MTK0123 "
-              value={defaultData?.kode_mapel}
-              onChange={(data) => {
-                setDefaultData({ ...defaultData, kode_mapel: data })
-              }}
+              value={defaultData?.kode}
+              onChange={(data) => setDefaultData({ ...defaultData, kode: data })}
             />
             <Form.HelpText>Kode Mapel harus diisi</Form.HelpText>
           </Form.Group>
 
-          <Form.Group controlId="deskripsi_mapel">
-            <Form.ControlLabel>Deskripsi Mapel</Form.ControlLabel>
+          <Form.Group controlId="nama_mapel">
+            <Form.ControlLabel>Nama Mapel</Form.ControlLabel>
             <Form.Control
               // className='!w-[700px]'
-              accepter={Textarea}
-              name="deskripsi_mapel"
+              name="name"
               errorPlacement='bottomEnd'
-              placeholder="Matematika adalah salah satu mapel... "
-              rows={5}
-              required
-              value={defaultData?.deskripsi_mapel}
-              onChange={(data) => {
-                setDefaultData({ ...defaultData, deskripsi_mapel: data })
-              }}
+              placeholder="Matematika "
+              value={defaultData?.name}
+              onChange={(data) => setDefaultData({ ...defaultData, name: data })}
             />
-            <Form.HelpText>Deskripsi Mapel harus diisi</Form.HelpText>
+            <Form.HelpText>Nama Mapel harus diisi</Form.HelpText>
           </Form.Group>
 
-          <Form.Group controlId="tingkat">
-            <Form.ControlLabel>Pilih Tingkatan</Form.ControlLabel>
+          <Form.Group controlId="tahun_ajaran_id">
+            <Form.ControlLabel>Pilih Tahun Ajaran</Form.ControlLabel>
             <Form.Control
-              // className='!w-[700px]'
+              className='!w-full'
               accepter={SelectPicker}
-              data={tingkat}
-              style={{ width: 224 }}
-              cleanable={false}
-              name='tingkatan_id'
-              value={parseInt(defaultData?.tingkatan_id)}
-              onChange={(data) => {
-                setDefaultData({ ...defaultData, tingkatan_id: data })
-                // console.log(data);
-              }}
+              data={tahunAjaranList}
+              onOpen={updateData}
+              onSearch={updateData}
+              renderMenu={menuList}
+              name='tahun_ajaran_id'
+              value={defaultData?.tahun_ajaran_id}
+              onChange={(data) => setDefaultData({ ...defaultData, tahun_ajaran_id: data })}
             />
-            <Form.HelpText>Pilih tingkatan harus dipilih</Form.HelpText>
+            <Form.HelpText>Pilih Tahun Ajaran harus dipilih</Form.HelpText>
+          </Form.Group>
+
+          <Form.Group controlId="user_id">
+            <Form.ControlLabel>Pilih User</Form.ControlLabel>
+            <Form.Control
+              className='!w-full'
+              accepter={SelectPicker}
+              data={userList}
+              onOpen={updateData}
+              onSearch={updateData}
+              renderMenu={menuList}
+              name='user_id'
+              value={defaultData?.user_id}
+              onChange={(data) => setDefaultData({ ...defaultData, user_id: data })}
+            />
+            <Form.HelpText>Pilih User harus dipilih</Form.HelpText>
           </Form.Group>
 
           <ButtonToolbar>
