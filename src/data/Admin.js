@@ -135,8 +135,8 @@ const Admin = [
       {
         // id: "1-1",
         id: "Tujuan Pembelajaran",
-        childtitle: "Mata Pelajaran",
-        childlink: "/admin/daftar-mapel",
+        childtitle: "Tujuan Pembelajaran",
+        childlink: "/admin/daftar-tujuan-pembelajaran",
       },
     ]
   },

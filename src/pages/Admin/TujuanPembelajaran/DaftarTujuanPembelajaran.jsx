@@ -5,15 +5,14 @@ import { useNavigate } from 'react-router-dom';
 import EditIcon from '@rsuite/icons/Edit';
 import TrashIcon from '@rsuite/icons/Trash';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteMapel, getMapel, mapelSelector } from '../../../store/mapelSlice';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { deleteTujuanPembelajaran, getTujuanPembelajaran, tujuanPembelajaranSelector } from '../../../store/tujuanPembelajaranSlice';
 import RemindIcon from '@rsuite/icons/legacy/Remind';
+import Cookies from 'universal-cookie';
 
 const { Column, HeaderCell, Cell } = Table;
 const { getHeight } = DOMHelper;
 
-const DaftarMapel = () => {
+const DaftarTujuanPembelajaran = () => {
   const [limit, setLimit] = React.useState(10);
   const [page, setPage] = React.useState(1);
   const [defaultData, setDefaultData] = React.useState([]);
@@ -21,6 +20,23 @@ const DaftarMapel = () => {
   const [sortColumn, setSortColumn] = React.useState();
   const [sortType, setSortType] = React.useState();
   const navigate = useNavigate();
+  // const kelasAPI = `${import.meta.env.VITE_API}/master/tujuanPembelajaran`
+
+  // const dataAPI = async () => {
+  //   const response = await fetch(kelasAPI)
+  //   const json = await response.json()
+  //   const data = await json
+
+  //   console.log(data);
+
+  //   if (response.status === 200) {
+  //     setDefaultData(data)
+  //   }
+  // }
+
+  // React.useEffect(() => {
+  //   dataAPI()
+  // }, [])
 
   const [open, setOpen] = React.useState(false);
   const [id, setId] = React.useState();
@@ -30,37 +46,48 @@ const DaftarMapel = () => {
   };
   const handleClose = () => setOpen(false);
 
-  // const tahunAPI = `${import.meta.env.VITE_API}/tahun-ajaran`
-
-  // const dataAPI = async () => {
-  //   const response = await fetch(tahunAPI)
-  //   const json = await response.json()
-  //   const data = await json
-
-  //   console.log(json);
-
-  //   // if (response.status === 200) {
-  //   //   setDefaultData(data)
-  //   // }
-  // }
-
-  // React.useEffect(() => {
-  //   dataAPI()
-  // }, [])
-
   const dispath = useDispatch()
-  const mapel = useSelector(mapelSelector.selectAll)
+  const tujuanPembelajaran = useSelector(tujuanPembelajaranSelector.selectAll)
+  const refreshAPI = `${import.meta.env.VITE_API}/refresh-token`
+
+  const refresh_token = async (api) => {
+    const cookies = new Cookies()
+    let token = cookies.get("token")
+    const refresh = await fetch(api, {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    })
+
+    if (refresh.status === 200) {
+      const data = await refresh.json()
+
+      cookies.remove("token", {
+        path: "/",
+        expires: new Date(new Date().getTime() + 200 * 1000)
+      });
+
+      cookies.set("token", data.access_token, {
+        path: "/",
+        expires: new Date(new Date().getTime() + 200 * 1000)
+      });
+    }
+  }
 
   React.useEffect(() => {
-    dispath(getMapel())
+    dispath(getTujuanPembelajaran())
+    // refresh_token()
   }, [dispath])
 
+  // React.useEffect(() => {
+  //   refresh_token(refreshAPI)
+  // }, [dispath, tujuanPembelajaran])
+
 
   React.useEffect(() => {
-    // setDefaultData(mapel)
-    // console.log(mapel);
-    setDefaultData(mapel != "Tidak ada data" ? mapel : [])
-  }, [mapel])
+    setDefaultData(tujuanPembelajaran != "Tidak ada data" ? tujuanPembelajaran : [])
+  }, [tujuanPembelajaran])
 
   const handleChangeLimit = dataKey => {
     setPage(1);
@@ -80,7 +107,7 @@ const DaftarMapel = () => {
 
   const filteredData = () => {
     const filtered = data.filter(item => {
-      if (item.name.toLowerCase() != undefined && !item.name.toLowerCase().includes(searchKeyword.toLowerCase())) {
+      if (item.title.toLowerCase() != undefined && !item.title.toLowerCase().includes(searchKeyword.toLowerCase())) {
         return false;
       }
 
@@ -111,7 +138,7 @@ const DaftarMapel = () => {
 
   const handleDelete = () => {
     setOpen(false)
-    dispath(deleteMapel(id))
+    dispath(deleteTujuanPembelajaran(id))
     toast.success(`Data id ${id} berhasil dihapus`, {
       position: "top-center",
       autoClose: 1500,
@@ -124,6 +151,8 @@ const DaftarMapel = () => {
     });
   }
 
+  // const [index, setIndex] = React.useState(0)
+
   return (
     <>
       <Panel
@@ -131,18 +160,17 @@ const DaftarMapel = () => {
           <>
             <Breadcrumb>
               <Breadcrumb.Item>Tahun Ajaran</Breadcrumb.Item>
-              <Breadcrumb.Item active>Mata Pelajaran</Breadcrumb.Item>
+              <Breadcrumb.Item active>Daftar Tujuan Pembelajaran</Breadcrumb.Item>
             </Breadcrumb>
           </>
         }
       >
-        <ToastContainer />
         <Stack className='flex justify-between mb-5' spacing={6}>
           <Button appearance="primary" className='bg-blue-400'
-            onClick={() => navigate(`/admin/tambah-mapel`)}
+            onClick={() => navigate(`/admin/tambah-tujuan-pembelajaran`)}
           // href='tambah-kelas'
           >
-            Tambah Mapel
+            Tambah Tujuan Pembelajaran
           </Button>
 
           <InputGroup inside>
@@ -160,40 +188,28 @@ const DaftarMapel = () => {
           onSortColumn={handleSortColumn}
           wordWrap="break-word">
 
-          <Column width={120} align="center" fixed>
-            <HeaderCell>Kode Mapel</HeaderCell>
-            {/* <Cell dataKey="nama_mapel" /> */}
-            <Cell>{rowData => `${rowData?.kode}`}</Cell>
+          <Column flexGrow={1} align="center" fullText fixed>
+            <HeaderCell>Title</HeaderCell>
+            {/* <Cell dataKey="name" /> */}
+            <Cell>{rowData => `${rowData?.title}`}</Cell>
           </Column>
 
           <Column flexGrow={1} align="center" fullText fixed>
-            <HeaderCell>Nama Mapel</HeaderCell>
-            {/* <Cell dataKey="kode_mapel" /> */}
-            <Cell>{rowData => `${rowData?.name}`}</Cell>
-          </Column>
-
-          <Column width={140} align="center" fixed>
-            <HeaderCell>Kode Tahun Ajaran</HeaderCell>
-            {/* <Cell dataKey="deskripsi_mapel" /> */}
-            <Cell>{rowData => `${rowData?.tahun_ajaran?.kode}`}</Cell>
+            <HeaderCell>Body</HeaderCell>
+            {/* <Cell dataKey="nisn" /> */}
+            <Cell>{rowData => `${rowData?.body}`}</Cell>
           </Column>
 
           <Column width={100} align="center" fixed>
-            <HeaderCell>Semester</HeaderCell>
-            {/* <Cell dataKey="deskripsi_mapel" /> */}
-            <Cell>{rowData => `${rowData?.tahun_ajaran?.semester}`}</Cell>
+            <HeaderCell>Pengajuan</HeaderCell>
+            {/* <Cell dataKey="tujuan_masuk" /> */}
+            <Cell>{rowData => `${rowData?.pengajuan}`}</Cell>
           </Column>
 
-          <Column width={120} align="center" fixed>
-            <HeaderCell>NIP</HeaderCell>
-            {/* <Cell dataKey="deskripsi_mapel" /> */}
-            <Cell>{rowData => `${rowData?.user?.nip}`}</Cell>
-          </Column>
-
-          <Column flexGrow={1} align="center" fullText fixed>
-            <HeaderCell>Nama Guru</HeaderCell>
-            {/* <Cell dataKey="deskripsi_mapel" /> */}
-            <Cell>{rowData => `${rowData?.user?.name}`}</Cell>
+          <Column width={100} align="center" fixed>
+            <HeaderCell>Status</HeaderCell>
+            {/* <Cell dataKey='tanggal_lahir' /> */}
+            <Cell>{rowData => `${rowData?.status}`}</Cell>
           </Column>
 
           <Column width={100} align="center" fixed>
@@ -201,16 +217,21 @@ const DaftarMapel = () => {
             <Cell style={{ padding: '6px' }}>
               {rowData => (
                 <div className='flex place-content-center gap-1'>
-                  <Button className='hover:bg-green-500 group' onClick={() => navigate(`/admin/edit-mapel/${rowData.id}`)}>
+                  <Button className='hover:bg-green-500 group' onClick={() => navigate(`/admin/edit-tujuan-pembelajaran/${rowData.id}`)}>
                     <EditIcon className='group-hover:text-white' />
                   </Button>
-                  <Button className='hover:bg-red-500 group' onClick={() => handleOpen(rowData.kode)}>
+                  <Button className='hover:bg-red-500 group' onClick={() => handleOpen(rowData.id)}>
                     <TrashIcon className='group-hover:text-white' />
                   </Button>
                 </div>
               )}
             </Cell>
           </Column>
+
+          {/* <Column width={100} sortable>
+            <HeaderCell>Elemen</HeaderCell>
+            <Cell dataKey="ml.nama_Lembaga" />
+          </Column> */}
 
         </Table>
         <div style={{ padding: 20 }}>
@@ -235,7 +256,7 @@ const DaftarMapel = () => {
         <Modal backdrop="static" role="alertdialog" open={open} onClose={handleClose} size="xs">
           <Modal.Body>
             <RemindIcon style={{ color: '#ffb300', fontSize: 24 }} />
-            Apakah kamu yakin untuk menghapus data dengan kode {id} ini?
+            Apakah kamu yakin untuk menghapus data dengan id {id} ini?
           </Modal.Body>
           <Modal.Footer>
             <Button className='bg-sky-500' onClick={handleDelete} appearance="primary">
@@ -251,4 +272,4 @@ const DaftarMapel = () => {
   )
 }
 
-export default DaftarMapel
+export default DaftarTujuanPembelajaran

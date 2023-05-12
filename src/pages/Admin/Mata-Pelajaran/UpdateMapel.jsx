@@ -8,11 +8,10 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Cookies from 'universal-cookie';
 
-const { StringType, NumberType } = Schema.Types;
+const { StringType } = Schema.Types;
 const model = Schema.Model({
-  nama_mapel: StringType().isRequired('Inputan harus diisi.'),
-  deskripsi_mapel: StringType().isRequired('Inputan harus diisi.'),
-  kode_mapel: StringType().isRequired('Inputan harus diisi.').containsNumber('Harus berisi angka'),
+  name: StringType().isRequired('Inputan harus diisi.'),
+  kode: StringType().isRequired('Inputan harus diisi.').containsNumber('Harus berisi angka'),
 });
 
 const Textarea = React.forwardRef((props, ref) => <Input {...props} ref={ref} as="textarea" />)
@@ -144,9 +143,9 @@ const UpdateMapel = () => {
   }, [mapel])
 
   const handleSubmit = async () => {
-    console.log(formValue, 'Form Value');
+    // console.log(formValue, 'Form Value');
     // console.log();
-    // if (formRef.current.check() && formValue != {}) {
+    if (formRef.current.check() && formValue != {}) {
       const res = await dispatch(updateMapel(formValue))
 
       if (res.meta.requestStatus === "fulfilled") {
@@ -164,7 +163,7 @@ const UpdateMapel = () => {
         // }, 100);
         navigate("/admin/daftar-mapel")
       }
-    // }
+    }
   };
   return (
     <>

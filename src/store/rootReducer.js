@@ -4,6 +4,9 @@ import siswaSlice from "./siswaSlice";
 import plotSiswaSlice from "./plotSiswaSlice";
 import kelasSlice from "./kelasSlice";
 import mapelSlice from "./mapelSlice";
+import tahunAjaranSlice from './tahunAjaranSlice'
+import tujuanPembelajaranSlice from './tujuanPembelajaranSlice'
+import profileSlice from './profileSlice'
 
 const rootReducer = {
   loginSlice,
@@ -11,6 +14,9 @@ const rootReducer = {
   kelasSlice,
   siswaSlice,
   plotSiswaSlice,
-  mapelSlice
+  mapelSlice,
+  tahunAjaranSlice,
+  tujuanPembelajaranSlice,
+  profileSlice
 };
 export default rootReducer;

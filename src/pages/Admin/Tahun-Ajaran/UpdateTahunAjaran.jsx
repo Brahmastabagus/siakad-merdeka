@@ -61,7 +61,7 @@ const UpdateTahunAjaran = () => {
     formValue.tgl_selesai = dater(formValue.tgl_selesai)
     if (formRef.current.check()) {
       const res = await dispatch(updateTahunAjaran(formValue))
-      console.log(res);
+      // console.log(res);
 
       if (res.meta.requestStatus === "fulfilled") {
         // setTimeout(() => {

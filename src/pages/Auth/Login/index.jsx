@@ -80,14 +80,17 @@ const Index = () => {
       //   toaster.push(<Message type="error">Error</Message>);
       // }
       const res = await dispatch(getLogin(formValue))
-      const cookies = new Cookies();
-      let token = res.payload.token
-      cookies.set("token", token, {
-        path: "/",
-        expires: new Date(new Date().getTime() + 200 * 1000)
-      });
-      let role = res.payload.data.role.name
-      // console.log();
+      // if (res) {
+        const cookies = new Cookies();
+        let token = res.payload.token
+        cookies.set("token", token, {
+          path: "/",
+          expires: new Date(new Date().getTime() + 200 * 1000)
+        });
+        let role = res.payload.data.role.name
+        
+      // }
+      // console.log(res)
 
       if (res.meta.requestStatus === "fulfilled") {
         // setTimeout(() => {

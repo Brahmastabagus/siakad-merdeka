@@ -33,6 +33,9 @@ import LupaPassword from "./pages/Auth/LupaPassword";
 import DaftarTahunAjaran from "./pages/Admin/Tahun-Ajaran/DaftarTahunAjaran";
 import TambahTahunAjaran from "./pages/Admin/Tahun-Ajaran/TambahTahunAjaran";
 import UpdateTahunAjaran from "./pages/Admin/Tahun-Ajaran/UpdateTahunAjaran";
+import DaftarTujuanPembelajaran from "./pages/Admin/TujuanPembelajaran/DaftarTujuanPembelajaran";
+import TambahTujuanPembelajaran from "./pages/Admin/TujuanPembelajaran/TambahTujuanPembelajaran";
+import UpdateTujuanPembelajaran from "./pages/Admin/TujuanPembelajaran/UpdateTujuanPembelajaran";
 
 function App() {
   const { idSiswa } = useParams()
@@ -73,7 +76,7 @@ function App() {
     },
     {
       path: "/admin",
-      element: <Layout />,
+      element: <AuthMiddleware component={Layout} auth={"admin"} />,
       errorElement: <ErrorPage />,
       children: [
         {
@@ -144,6 +147,21 @@ function App() {
         {
           path: "/admin/edit-tahun-ajaran/:idTahunAjaran",
           element: <AuthMiddleware component={UpdateTahunAjaran} auth="admin" />,
+          errorElement: <ErrorPage />,
+        },
+        {
+          path: "/admin/daftar-tujuan-pembelajaran",
+          element: <AuthMiddleware component={DaftarTujuanPembelajaran} auth="admin" />,
+          errorElement: <ErrorPage />,
+        },
+        {
+          path: "/admin/tambah-tujuan-pembelajaran",
+          element: <AuthMiddleware component={TambahTujuanPembelajaran} auth="admin" />,
+          errorElement: <ErrorPage />,
+        },
+        {
+          path: "/admin/edit-tujuan-pembelajaran/:idTujuanPembelajaran",
+          element: <AuthMiddleware component={UpdateTujuanPembelajaran} auth="admin" />,
           errorElement: <ErrorPage />,
         },
       ]

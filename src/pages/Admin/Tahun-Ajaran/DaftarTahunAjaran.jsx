@@ -229,7 +229,7 @@ const DaftarTahunAjaran = () => {
                   <Button className='hover:bg-green-500 group' onClick={() => navigate(`/admin/edit-tahun-ajaran/${rowData.id}`)}>
                     <EditIcon className='group-hover:text-white' />
                   </Button>
-                  <Button className='hover:bg-red-500 group' onClick={() => handleOpen(rowData.id)}>
+                  <Button className='hover:bg-red-500 group' onClick={() => handleOpen(rowData.kode)}>
                     <TrashIcon className='group-hover:text-white' />
                   </Button>
                 </div>
@@ -265,7 +265,7 @@ const DaftarTahunAjaran = () => {
         <Modal backdrop="static" role="alertdialog" open={open} onClose={handleClose} size="xs">
           <Modal.Body>
             <RemindIcon style={{ color: '#ffb300', fontSize: 24 }} />
-            Apakah kamu yakin untuk menghapus data dengan id {id} ini?
+            Apakah kamu yakin untuk menghapus data dengan kode {id} ini?
           </Modal.Body>
           <Modal.Footer>
             <Button className='bg-sky-500' onClick={handleDelete} appearance="primary">
