@@ -8,6 +8,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { deleteTujuanPembelajaran, getTujuanPembelajaran, tujuanPembelajaranSelector } from '../../../store/tujuanPembelajaranSlice';
 import RemindIcon from '@rsuite/icons/legacy/Remind';
 import Cookies from 'universal-cookie';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const { Column, HeaderCell, Cell } = Table;
 const { getHeight } = DOMHelper;
@@ -40,10 +42,7 @@ const DaftarTujuanPembelajaran = () => {
 
   const [open, setOpen] = React.useState(false);
   const [id, setId] = React.useState();
-  const handleOpen = (id) => {
-    setId(id)
-    setOpen(true)
-  };
+  const [header, setHeader] = React.useState();
   const handleClose = () => setOpen(false);
 
   const dispath = useDispatch()
@@ -136,10 +135,16 @@ const DaftarTujuanPembelajaran = () => {
     return filtered;
   };
 
+  const handleOpen = (id, header) => {
+    setId(id)
+    setHeader(header)
+    setOpen(true)
+  };
+
   const handleDelete = () => {
     setOpen(false)
     dispath(deleteTujuanPembelajaran(id))
-    toast.success(`Data id ${id} berhasil dihapus`, {
+    toast.success(`Data judul ${header} berhasil dihapus`, {
       position: "top-center",
       autoClose: 1500,
       hideProgressBar: false,
@@ -165,6 +170,7 @@ const DaftarTujuanPembelajaran = () => {
           </>
         }
       >
+        <ToastContainer />
         <Stack className='flex justify-between mb-5' spacing={6}>
           <Button appearance="primary" className='bg-blue-400'
             onClick={() => navigate(`/admin/tambah-tujuan-pembelajaran`)}
@@ -220,7 +226,7 @@ const DaftarTujuanPembelajaran = () => {
                   <Button className='hover:bg-green-500 group' onClick={() => navigate(`/admin/edit-tujuan-pembelajaran/${rowData.id}`)}>
                     <EditIcon className='group-hover:text-white' />
                   </Button>
-                  <Button className='hover:bg-red-500 group' onClick={() => handleOpen(rowData.id)}>
+                  <Button className='hover:bg-red-500 group' onClick={() => handleOpen(rowData.id, rowData.title)}>
                     <TrashIcon className='group-hover:text-white' />
                   </Button>
                 </div>
@@ -256,11 +262,11 @@ const DaftarTujuanPembelajaran = () => {
         <Modal backdrop="static" role="alertdialog" open={open} onClose={handleClose} size="xs">
           <Modal.Body>
             <RemindIcon style={{ color: '#ffb300', fontSize: 24 }} />
-            Apakah kamu yakin untuk menghapus data dengan id {id} ini?
+            Apakah kamu yakin untuk menghapus data dengan judul {header} ini?
           </Modal.Body>
           <Modal.Footer>
-            <Button className='bg-sky-500' onClick={handleDelete} appearance="primary">
-              Ok
+            <Button className='bg-red-500' onClick={handleDelete} color="red" appearance="primary">
+              Hapus
             </Button>
             <Button className='bg-slate-100' onClick={handleClose} appearance="subtle">
               Cancel

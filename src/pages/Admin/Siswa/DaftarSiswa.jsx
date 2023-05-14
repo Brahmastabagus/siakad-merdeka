@@ -5,9 +5,11 @@ import { useNavigate } from 'react-router-dom';
 import EditIcon from '@rsuite/icons/Edit';
 import TrashIcon from '@rsuite/icons/Trash';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteSiswa, getSiswa, siswaSelector } from '../../../store/plotSiswaSlice';
+import { deleteSiswa, getSiswa, siswaSelector } from '../../../store/siswaSlice';
 import RemindIcon from '@rsuite/icons/legacy/Remind';
 import Cookies from 'universal-cookie';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const { Column, HeaderCell, Cell } = Table;
 const { getHeight } = DOMHelper;
@@ -40,54 +42,50 @@ const DaftarSiswa = () => {
 
   const [open, setOpen] = React.useState(false);
   const [id, setId] = React.useState();
-  const handleOpen = (id) => {
-    setId(id)
-    setOpen(true)
-  };
+  const [name, setName] = React.useState();
   const handleClose = () => setOpen(false);
-
+  
   const dispath = useDispatch()
   const siswa = useSelector(siswaSelector.selectAll)
-  const refreshAPI = `${import.meta.env.VITE_API}/refresh-token`
+  // const refreshAPI = `${import.meta.env.VITE_API}/refresh-token`
 
-  const cookies = new Cookies()
-  const refresh_token = async (api, token) => {
-    const refresh = await fetch(api, {
-      method: "GET",
-      headers: {
-        "Authorization": `Bearer ${token}`
-      }
-    })
+  // const cookies = new Cookies()
+  // const refresh_token = async (api, token) => {
+  //   const refresh = await fetch(api, {
+  //     method: "GET",
+  //     headers: {
+  //       "Authorization": `Bearer ${token}`
+  //     }
+  //   })
 
-    if (refresh.status === 200) {
-      const data = await refresh.json()
+  //   if (refresh.status === 200) {
+  //     const data = await refresh.json()
 
-      cookies.remove("token", {
-        path: "/",
-        expires: new Date(new Date().getTime() + 200 * 1000)
-      });
+  //     cookies.remove("token", {
+  //       path: "/",
+  //       expires: new Date(new Date().getTime() + 200 * 1000)
+  //     });
 
-      cookies.set("token", data.access_token, {
-        path: "/",
-        expires: new Date(new Date().getTime() + 200 * 1000)
-      });
-    }
-  }
+  //     cookies.set("token", data.access_token, {
+  //       path: "/",
+  //       expires: new Date(new Date().getTime() + 200 * 1000)
+  //     });
+  //   }
+  // }
 
+  // React.useEffect(() => {
+  //   let token = cookies.get("token")
+  //   refresh_token(refreshAPI, token)
+  // }, [dispath])
+  
   React.useEffect(() => {
     dispath(getSiswa())
     // refresh_token()
   }, [dispath])
-  
-  React.useEffect(() => {
-    let token = cookies.get("token")
-    refresh_token(refreshAPI, token)
-  }, [dispath])
-
 
   React.useEffect(() => {
+    // console.log(siswa);
     setDefaultData(siswa != "Tidak ada data" ? siswa : [])
-    // console.log(defaultData);
   }, [siswa])
 
   // console.log(defaultData == );
@@ -111,7 +109,7 @@ const DaftarSiswa = () => {
 
   const filteredData = () => {
     const filtered = data.filter(item => {
-      if (item?.siswa?.name.toLowerCase() != undefined && !item?.siswa?.name.toLowerCase().includes(searchKeyword.toLowerCase())) {
+      if (item?.name.toLowerCase() != undefined && !item?.name.toLowerCase().includes(searchKeyword.toLowerCase())) {
         return false;
       }
 
@@ -140,10 +138,16 @@ const DaftarSiswa = () => {
     return filtered;
   };
 
+  const handleOpen = (id, name) => {
+    setId(id)
+    setName(name)
+    setOpen(true)
+  };
+
   const handleDelete = () => {
     setOpen(false)
     dispath(deleteSiswa(id))
-    toast.success(`Data id ${id} berhasil dihapus`, {
+    toast.success(`Data nama ${name} berhasil dihapus`, {
       position: "top-center",
       autoClose: 1500,
       hideProgressBar: false,
@@ -182,6 +186,7 @@ const DaftarSiswa = () => {
             </InputGroup.Addon>
           </InputGroup>
         </Stack>
+        <ToastContainer />
         <Table
           height={Math.max(getHeight(window) - 200, 400)}
           data={filteredData()}
@@ -193,36 +198,25 @@ const DaftarSiswa = () => {
           <Column flexGrow={1} align="center" fullText fixed>
             <HeaderCell>Nama</HeaderCell>
             {/* <Cell dataKey="name" /> */}
-            <Cell>{rowData => `${rowData?.siswa?.name}`}</Cell>
+            <Cell>{rowData => `${rowData?.name}`}</Cell>
           </Column>
 
-          <Column width={100} align="center" fixed>
+          <Column width={170} align="center" fixed>
             <HeaderCell>nisn</HeaderCell>
             {/* <Cell dataKey="nisn" /> */}
-            <Cell>{rowData => `${rowData?.siswa?.nisn ? rowData?.siswa?.nisn : "Tidak ada"}`}</Cell>
+            <Cell>{rowData => `${rowData?.nisn ? rowData?.nisn : "Tidak ada"}`}</Cell>
           </Column>
 
-          <Column width={130} align="center" fixed>
+          <Column width={170} align="center" fixed>
             <HeaderCell>Tahun Masuk</HeaderCell>
             {/* <Cell dataKey="tahun_masuk" /> */}
-            <Cell>{rowData => `${rowData?.siswa?.tahun_masuk}`}</Cell>
+            <Cell>{rowData => `${rowData?.tahun_masuk}`}</Cell>
           </Column>
 
-          <Column width={130} align="center" fixed>
+          <Column width={170} align="center" fixed>
             <HeaderCell>Tanggal Lahir</HeaderCell>
             {/* <Cell dataKey='tanggal_lahir' /> */}
-            <Cell>{rowData => `${rowData?.siswa?.tanggal_lahir}`}</Cell>
-          </Column>
-
-          <Column flexGrow={1} align="center" fullText fixed>
-            <HeaderCell>Kelas</HeaderCell>
-            {/* <Cell dataKey='tanggal_lahir' /> */}
-            <Cell>{rowData => `${rowData?.kelas?.name}`}</Cell>
-          </Column>
-          <Column width={130} align="center" fixed>
-            <HeaderCell>Mata Pelajaran</HeaderCell>
-            {/* <Cell dataKey='tanggal_lahir' /> */}
-            <Cell>{rowData => `${rowData?.mapel?.name}`}</Cell>
+            <Cell>{rowData => `${rowData?.tanggal_lahir}`}</Cell>
           </Column>
 
           <Column width={100} align="center" fixed>
@@ -230,10 +224,10 @@ const DaftarSiswa = () => {
             <Cell style={{ padding: '6px' }}>
               {rowData => (
                 <div className='flex place-content-center gap-1'>
-                  <Button className='hover:bg-green-500 group' onClick={() => navigate(`/admin/edit-siswa/${rowData.siswa.id}`)}>
+                  <Button className='hover:bg-green-500 group' onClick={() => navigate(`/admin/edit-siswa/${rowData.id}`)}>
                     <EditIcon className='group-hover:text-white' />
                   </Button>
-                  <Button className='hover:bg-red-500 group' onClick={() => handleOpen(rowData.siswa.id)}>
+                  <Button className='hover:bg-red-500 group' onClick={() => handleOpen(rowData.id, rowData.name)}>
                     <TrashIcon className='group-hover:text-white' />
                   </Button>
                 </div>
@@ -269,11 +263,11 @@ const DaftarSiswa = () => {
         <Modal backdrop="static" role="alertdialog" open={open} onClose={handleClose} size="xs">
           <Modal.Body>
             <RemindIcon style={{ color: '#ffb300', fontSize: 24 }} />
-            Apakah kamu yakin untuk menghapus data dengan id {id} ini?
+            Apakah kamu yakin untuk menghapus data dengan nama {name} ini?
           </Modal.Body>
           <Modal.Footer>
-            <Button className='bg-sky-500' onClick={handleDelete} appearance="primary">
-              Ok
+            <Button className='bg-red-500' onClick={handleDelete} color="red" appearance="primary">
+              Hapus
             </Button>
             <Button className='bg-slate-100' onClick={handleClose} appearance="subtle">
               Cancel

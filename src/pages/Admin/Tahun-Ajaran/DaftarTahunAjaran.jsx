@@ -8,6 +8,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { deleteTahunAjaran, getTahunAjaran, tahunAjaranSelector } from '../../../store/tahunAjaranSlice';
 import RemindIcon from '@rsuite/icons/legacy/Remind';
 import Cookies from 'universal-cookie';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const { Column, HeaderCell, Cell } = Table;
 const { getHeight } = DOMHelper;
@@ -40,52 +42,46 @@ const DaftarTahunAjaran = () => {
 
   const [open, setOpen] = React.useState(false);
   const [id, setId] = React.useState();
-  const handleOpen = (id) => {
-    setId(id)
-    setOpen(true)
-  };
+  const [kode, setKode] = React.useState();
   const handleClose = () => setOpen(false);
 
   const dispath = useDispatch()
   const tahunAjaran = useSelector(tahunAjaranSelector.selectAll)
-  const index = useSelector(tahunAjaranSelector.selectIds)
-  let indexs = Object.keys(index)
-  const refreshAPI = `${import.meta.env.VITE_API}/refresh-token`
+  // const refreshAPI = `${import.meta.env.VITE_API}/refresh-token`
 
-  const refresh_token = async (api) => {
-    const cookies = new Cookies()
-    let token = cookies.get("token")
-    const refresh = await fetch(api, {
-      method: "GET",
-      headers: {
-        "Authorization": `Bearer ${token}`
-      }
-    })
+  // const refresh_token = async (api) => {
+  //   const cookies = new Cookies()
+  //   let token = cookies.get("token")
+  //   const refresh = await fetch(api, {
+  //     method: "GET",
+  //     headers: {
+  //       "Authorization": `Bearer ${token}`
+  //     }
+  //   })
 
-    if (refresh.status === 200) {
-      const data = await refresh.json()
+  //   if (refresh.status === 200) {
+  //     const data = await refresh.json()
 
-      cookies.remove("token", {
-        path: "/",
-        expires: new Date(new Date().getTime() + 200 * 1000)
-      });
+  //     cookies.remove("token", {
+  //       path: "/",
+  //       expires: new Date(new Date().getTime() + 200 * 1000)
+  //     });
 
-      cookies.set("token", data.access_token, {
-        path: "/",
-        expires: new Date(new Date().getTime() + 200 * 1000)
-      });
-    }
-  }
-
-  React.useEffect(() => {
-    dispath(getTahunAjaran())
-    // refresh_token()
-  }, [dispath])
+  //     cookies.set("token", data.access_token, {
+  //       path: "/",
+  //       expires: new Date(new Date().getTime() + 200 * 1000)
+  //     });
+  //   }
+  // }
 
   // React.useEffect(() => {
   //   refresh_token(refreshAPI)
   // }, [dispath, tahunAjaran])
-
+  
+  React.useEffect(() => {
+    dispath(getTahunAjaran())
+    // refresh_token()
+  }, [dispath])
 
   React.useEffect(() => {
     setDefaultData(tahunAjaran != "Tidak ada data" ? tahunAjaran : [])
@@ -140,10 +136,16 @@ const DaftarTahunAjaran = () => {
     return filtered;
   };
 
+  const handleOpen = (id, kode) => {
+    setId(id)
+    setKode(kode)
+    setOpen(true)
+  };
+
   const handleDelete = () => {
     setOpen(false)
-    dispath(deleteTahunAjaran(id))
-    toast.success(`Data id ${id} berhasil dihapus`, {
+    dispath(deleteSiswa(id))
+    toast.success(`Data kode ${kode} berhasil dihapus`, {
       position: "top-center",
       autoClose: 1500,
       hideProgressBar: false,
@@ -229,7 +231,7 @@ const DaftarTahunAjaran = () => {
                   <Button className='hover:bg-green-500 group' onClick={() => navigate(`/admin/edit-tahun-ajaran/${rowData.id}`)}>
                     <EditIcon className='group-hover:text-white' />
                   </Button>
-                  <Button className='hover:bg-red-500 group' onClick={() => handleOpen(rowData.kode)}>
+                  <Button className='hover:bg-red-500 group' onClick={() => handleOpen(rowData.id, rowData.kode)}>
                     <TrashIcon className='group-hover:text-white' />
                   </Button>
                 </div>
@@ -265,11 +267,11 @@ const DaftarTahunAjaran = () => {
         <Modal backdrop="static" role="alertdialog" open={open} onClose={handleClose} size="xs">
           <Modal.Body>
             <RemindIcon style={{ color: '#ffb300', fontSize: 24 }} />
-            Apakah kamu yakin untuk menghapus data dengan kode {id} ini?
+            Apakah kamu yakin untuk menghapus data dengan kode {kode} ini?
           </Modal.Body>
           <Modal.Footer>
-            <Button className='bg-sky-500' onClick={handleDelete} appearance="primary">
-              Ok
+            <Button className='bg-red-500' onClick={handleDelete} color="red" appearance="primary">
+              Hapus
             </Button>
             <Button className='bg-slate-100' onClick={handleClose} appearance="subtle">
               Cancel

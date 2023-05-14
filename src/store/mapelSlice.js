@@ -38,7 +38,6 @@ export const setMapel = createAsyncThunk("mapel/setMapel", async (data) => {
       },
       body: JSON.stringify(data)
     })
-    console.log(response, data);
 
   const json = await response.json()
 
